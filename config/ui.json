@@ -4,6 +4,16 @@
   "global": {
     "serverPollingInterval": 10000
   },
+  "entities": {
+    "people": {
+      "useAddPersonEntityMarqueeWizard": true
+    }
+  },
+  "tasks": {
+    "individualTask": {
+      "reportCoverPageLogo": "LEMA"
+    }
+  },
   "colors": {
     "tasks": {
       "importanceColors": {
