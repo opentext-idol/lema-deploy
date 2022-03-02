@@ -26,6 +26,7 @@ services:
     environment:
       - ISOL_LICENSE_SERVER_HOST=${ISOL_LICENSE_SERVER_HOST}
       - ISOL_LICENSE_SERVER_PORT=${ISOL_LICENSE_SERVER_PORT}
+      - ISOL_ENTITY_INDEXDB_CFG=${ISOL_ENTITY_INDEXDB_CFG}
 
   entity-storagedb:
     image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-storagedb${ISOL_DOCKER_VERSION_SEP}${ISOL_BASE_VERSION}
@@ -35,6 +36,9 @@ services:
       - entity-storagedb-data:/var/lib/cassandra
     ports:
       - ${ISOL_ENTITY_STORAGEDB_DOCKER_PORT}:9042
+    environment:
+      - MAX_HEAP_SIZE=${ISOL_ENTITY_STORAGEDB_MAX_HEAP_SIZE}
+      - HEAP_NEWSIZE=${ISOL_ENTITY_STORAGEDB_HEAP_NEWSIZE}
 
   entity-service:
     image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-service${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}

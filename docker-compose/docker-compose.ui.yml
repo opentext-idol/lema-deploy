@@ -19,7 +19,7 @@ services:
     networks:
       - main
     volumes:
-      - ../config/ui.json:/usr/share/nginx/html/assets/config.json
+      - ${LEMA_UI_CONFIG_PATH}:/usr/share/nginx/html/assets/config.json
       - ${LEMA_UI_TLS_CERT_DIR}:/etc/nginx/ssl
     ports:
       - ${LEMA_UI_DOCKER_PORT}:${LEMA_UI_INTERNAL_PORT}
