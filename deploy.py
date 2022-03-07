@@ -86,7 +86,7 @@ def parse_args():
                    help='configure user-facing servers to accept HTTP connections (by default, '
                         'user-facing servers accept HTTPS connections)')
     p.add_argument('--config-file', metavar='FILE',
-                   help='Path to a configuration file with values that override all other '
+                   help='path to a configuration file with values that override all other '
                         'configuration files')
     return p.parse_args()
 
@@ -128,13 +128,15 @@ def run_compose(docker_host, components, config_path, detach=True, remove=False,
     compose_args.extend(['--env-file', build_env_file(env_paths)])
     for compose_path in get_compose_paths(components):
         compose_args.extend(['--file', compose_path])
-    compose_args.extend(['up'])
-    if detach:
-        compose_args.append('--detach')
-    if remove:
-        compose_args.append('--remove-orphans')
 
-    subprocess.check_call(compose_args)
+    subprocess.check_call(compose_args + ['pull'])
+
+    up_args = ['up']
+    if detach:
+        up_args.append('--detach')
+    if remove:
+        up_args.append('--remove-orphans')
+    subprocess.check_call(compose_args + up_args)
 
 
 def deploy(docker_host, components, config_path, disable_encryption):
