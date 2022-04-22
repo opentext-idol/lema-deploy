@@ -15,7 +15,7 @@
 services:
 
   entity-indexdb:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-indexdb${ISOL_DOCKER_VERSION_SEP}${ISOL_BASE_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-indexdb${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}
     networks:
       - main
     volumes:
@@ -29,7 +29,7 @@ services:
       - IDOL_COMPONENT_CFG=${ISOL_ENTITY_INDEXDB_CFG}
 
   entity-storagedb:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-storagedb${ISOL_DOCKER_VERSION_SEP}${ISOL_BASE_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-storagedb${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}
     networks:
       - main
     volumes:
@@ -40,24 +40,6 @@ services:
       - MAX_HEAP_SIZE=${ISOL_ENTITY_STORAGEDB_MAX_HEAP_SIZE}
       - HEAP_NEWSIZE=${ISOL_ENTITY_STORAGEDB_HEAP_NEWSIZE}
 
-  entity-service:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-service${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}
-    networks:
-      - main
-    volumes:
-      - entity-schemadb-data:/var/lib/janusgraph
-    ports:
-      - ${ISOL_ENTITY_SERVICE_DOCKER_PORT}:8182
-    environment:
-      - ISOL_ENTITY_STORAGEDB_HOST=entity-storagedb
-      - ISOL_ENTITY_STORAGEDB_PORT=9042
-      - ISOL_ENTITY_INDEXDB_HOST=entity-indexdb
-      - ISOL_ENTITY_INDEXDB_ACI_PORT=9100
-      - ISOL_ENTITY_INDEXDB_INDEX_PORT=9101
-      - ISOL_ENTITY_SERVICE_MEMORY_INITIAL_SIZE=${ISOL_ENTITY_SERVICE_MEMORY_INITIAL_SIZE}
-      - ISOL_ENTITY_SERVICE_MEMORY_MAX_SIZE=${ISOL_ENTITY_SERVICE_MEMORY_MAX_SIZE}
-
 volumes:
-  entity-schemadb-data:
   entity-storagedb-data:
   entity-indexdb-data:
