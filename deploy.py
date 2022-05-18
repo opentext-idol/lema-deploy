@@ -88,6 +88,8 @@ def parse_args():
     p.add_argument('--config-file', metavar='FILE',
                    help='path to a configuration file with values that override all other '
                         'configuration files')
+    p.add_argument('--skip-pull', action='store_const', const=True, default=False,
+                   help='skip pulling Docker images; allows running against a custom set of images')
     return p.parse_args()
 
 
@@ -116,20 +118,22 @@ def get_compose_paths(components):
             yield path
 
 
-def run_compose(docker_host, components, config_path, detach=True, remove=False, log_level='info'):
+def run_compose(components, options, detach=True, remove=False, log_level='info'):
     # base should be first
     components = ['base'] + list(components)
 
     compose_args = ['docker-compose']
     compose_args.extend(['--log-level', log_level])
-    if docker_host is not None:
-        compose_args.extend(['--host', docker_host])
-    env_paths = list(get_env_paths(components)) + ([] if config_path is None else [config_path])
+    if options.docker_host is not None:
+        compose_args.extend(['--host', options.docker_host])
+    env_paths = (list(get_env_paths(components)) +
+                 ([] if options.config_file is None else [options.config_file]))
     compose_args.extend(['--env-file', build_env_file(env_paths)])
     for compose_path in get_compose_paths(components):
         compose_args.extend(['--file', compose_path])
 
-    subprocess.check_call(compose_args + ['pull'])
+    if not options.skip_pull:
+        subprocess.check_call(compose_args + ['pull'])
 
     up_args = ['up']
     if detach:
@@ -139,22 +143,22 @@ def run_compose(docker_host, components, config_path, detach=True, remove=False,
     subprocess.check_call(compose_args + up_args)
 
 
-def deploy(docker_host, components, config_path, disable_encryption):
+def deploy(components, options):
     components = list(components)
-    if disable_encryption:
+    if options.disable_encryption:
         # should be last
         components.append('unencrypted')
 
-    run_compose(docker_host, components, config_path, remove=True)
+    run_compose(components, options, remove=True)
 
 
-def initialise(docker_host, config_path, disable_encryption):
+def initialise(options):
     components = ['auth-setup']
-    if disable_encryption:
+    if options.disable_encryption:
         # should be last
         components.append('unencrypted')
 
-    run_compose(docker_host, components, config_path, detach=False, log_level='error')
+    run_compose(components, options, detach=False, log_level='error')
 
 
 def main():
@@ -163,11 +167,9 @@ def main():
     # we set COMPONENT_DEFAULT to a unique object, set it as valid, and set it as the default
     # then if no values are specified, argparse gives us COMPONENT_DEFAULT instead of a list
     components = [] if program_args.component is COMPONENT_DEFAULT else program_args.component
-    deploy(program_args.docker_host, components, program_args.config_file,
-           program_args.disable_encryption)
+    deploy(components, program_args)
     if program_args.init:
-        initialise(program_args.docker_host, program_args.config_file,
-                   program_args.disable_encryption)
+        initialise(program_args)
 
 
 main()
