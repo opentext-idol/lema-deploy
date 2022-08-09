@@ -19,12 +19,12 @@ services:
     networks:
       - main
     volumes:
-      - filestore-service-data:/mnt/data
+      - filestore-service-data:/data
     ports:
-      - ${ISOL_FILESTORE_SERVICE_DOCKER_PORT}:9000
+      - ${ISOL_FILESTORE_SERVICE_DOCKER_PORT}:8000
     environment:
-      - MINIO_ROOT_USER=${ISOL_FILESTORE_SERVICE_USERNAME}
-      - MINIO_ROOT_PASSWORD=${ISOL_FILESTORE_SERVICE_PASSWORD}
+      - SCALITY_ACCESS_KEY_ID=${ISOL_FILESTORE_SERVICE_USERNAME}
+      - SCALITY_SECRET_ACCESS_KEY=${ISOL_FILESTORE_SERVICE_PASSWORD}
 
 volumes:
   filestore-service-data:
