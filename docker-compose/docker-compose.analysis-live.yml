@@ -20,11 +20,33 @@ services:
       - main
     volumes:
       - analysis-live-mediaserver-license-data:/mediaserver/license-cache
+      - analysis-live-mediaserver-output:/mediaserver/output
     ports:
       - ${ISOL_ANALYSIS_LIVE_MEDIASERVER_ACI_DOCKER_PORT}:14000
     environment:
       - ISOL_LICENSE_SERVER_HOST=${ISOL_LICENSE_SERVER_HOST}
       - ISOL_LICENSE_SERVER_PORT=${ISOL_LICENSE_SERVER_PORT}
 
+  analysis-live-processor:
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-analysis-live-processor${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}
+    networks:
+      - main
+    volumes:
+      - analysis-live-mediaserver-output:/mediaserver-output
+    environment:
+      - ISOL_ENTITY_STORAGEDB_HOST=${ISOL_ENTITY_STORAGEDB_HOST}
+      - ISOL_ENTITY_STORAGEDB_PORT=${ISOL_ENTITY_STORAGEDB_PORT}
+      - ISOL_ENTITY_INDEXDB_HOST=${ISOL_ENTITY_INDEXDB_HOST}
+      - ISOL_ENTITY_INDEXDB_ACI_PORT=${ISOL_ENTITY_INDEXDB_ACI_PORT}
+      - ISOL_ENTITY_INDEXDB_INDEX_PORT=${ISOL_ENTITY_INDEXDB_INDEX_PORT}
+      - ISOL_AUDIT_HOST=${ISOL_AUDIT_DB_HOST}
+      - ISOL_AUDIT_PORT=${ISOL_AUDIT_DB_PORT}
+      - ISOL_AUDIT_USERNAME=${ISOL_AUDIT_DB_USERNAME}
+      - ISOL_AUDIT_PASSWORD=${ISOL_AUDIT_DB_PASSWORD}
+      - ISOL_AUDIT_DATABASE_NAME=${ISOL_AUDIT_DB_NAME}
+      - ISOL_ANALYSIS_LIVE_MEDIASERVER_HOST=analysis-live-mediaserver
+      - ISOL_ANALYSIS_LIVE_MEDIASERVER_ACI_PORT=14000
+
 volumes:
   analysis-live-mediaserver-license-data:
+  analysis-live-mediaserver-output:
