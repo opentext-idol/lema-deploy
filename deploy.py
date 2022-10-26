@@ -92,6 +92,8 @@ def parse_args():
                         'configuration files')
     p.add_argument('--skip-pull', action='store_const', const=True, default=False,
                    help='skip pulling Docker images; allows running against a custom set of images')
+    p.add_argument('--skip-deploy', action='store_const', const=True, default=False,
+                   help='don\'t start Docker containers')
     return p.parse_args()
 
 
@@ -137,12 +139,13 @@ def run_compose(components, options, detach=True, remove=False, log_level='info'
     if not options.skip_pull:
         subprocess.check_call(compose_args + ['pull'])
 
-    up_args = ['up']
-    if detach:
-        up_args.append('--detach')
-    if remove:
-        up_args.append('--remove-orphans')
-    subprocess.check_call(compose_args + up_args)
+    if not options.skip_deploy:
+        up_args = ['up']
+        if detach:
+            up_args.append('--detach')
+        if remove:
+            up_args.append('--remove-orphans')
+        subprocess.check_call(compose_args + up_args)
 
 
 def deploy(components, options):

@@ -15,7 +15,7 @@
 services:
 
   auth-db:
-    image: postgres:${ISOL_POSTGRES_VERSION}
+    image: ${ISOL_PUBLIC_DOCKER_REGISTRY}postgres:${ISOL_POSTGRES_VERSION}
     networks:
       - main
     volumes:
