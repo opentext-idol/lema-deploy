@@ -15,7 +15,7 @@
 services:
 
   analysis-service:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-analysis-service${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-analysis-service${ISOL_DOCKER_VERSION_SEP}${ISOL_ANALYSIS_NIFI_VERSION}
     networks:
       - main
     ports:

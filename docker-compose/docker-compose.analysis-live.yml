@@ -28,7 +28,7 @@ services:
       - ISOL_LICENSE_SERVER_PORT=${ISOL_LICENSE_SERVER_PORT}
 
   analysis-live-processor:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-analysis-live-processor${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-analysis-live-processor${ISOL_DOCKER_VERSION_SEP}${ISOL_ANALYSIS_LIVE_VERSION}
     networks:
       - main
     volumes:

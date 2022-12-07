@@ -15,7 +15,7 @@
 services:
 
   audit-db:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-audit-db${ISOL_DOCKER_VERSION_SEP}${ISOL_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-audit-db${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
     networks:
       - main
     volumes:
