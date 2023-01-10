@@ -7,8 +7,8 @@ The following installation steps compliment the full LEMA Administration Guide, 
 To deploy LEMA to a Docker system, use the `deploy.py` tool, which requires Docker Compose.
 Required software versions:
 - Python 3, version 3.6 or later
-- Docker, version 1.13.0 or later
-- Docker Compose, version 1.10.0 or later
+- Docker, version 20.10.22 or later
+- Docker Compose, version 2.14.1 or later
 
 Log in with your own password to gain access to the Micro Focus IDOL containers on Docker Hub:
 
@@ -23,7 +23,7 @@ in your License Server configuration to the host you will deploy the `analysis` 
 
 Add TLS certificates in `config/https/` (see the `Encryption` section).
 
-Run the `deploy.py` tool using Python.  (Much like when running `docker` or `docker-compose`, you
+Run the `deploy.py` tool using Python.  (Much like when running `docker`, you
 may have to run it as a different user with sufficient permissions to manage Docker containers.)
 
 ```

@@ -126,8 +126,7 @@ def run_compose(components, options, detach=True, remove=False, log_level='info'
     # base should be first
     components = ['base'] + list(components)
 
-    compose_args = ['docker-compose']
-    compose_args.extend(['--log-level', log_level])
+    compose_args = ['docker', 'compose']
     if options.docker_host is not None:
         compose_args.extend(['--host', options.docker_host])
     env_paths = (list(get_env_paths(components)) +
