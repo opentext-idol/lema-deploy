@@ -127,8 +127,10 @@ def run_compose(components, options, detach=True, remove=False, log_level='info'
     components = ['base'] + list(components)
 
     compose_args = ['docker', 'compose']
-    if options.docker_host is not None:
-        compose_args.extend(['--host', options.docker_host])
+    dockhost = os.environ['DOCKER_HOST']
+    print(f'docker host is: {dockhost}')
+    # if options.docker_host is not None:
+    #     compose_args.extend(['--host', options.docker_host])
     env_paths = (list(get_env_paths(components)) +
                  ([] if options.config_file is None else [options.config_file]))
     compose_args.extend(['--env-file', build_env_file(env_paths)])
