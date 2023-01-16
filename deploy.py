@@ -127,10 +127,6 @@ def run_compose(components, options, detach=True, remove=False, log_level='info'
     components = ['base'] + list(components)
 
     compose_args = ['docker', 'compose']
-    dockhost = os.environ['DOCKER_HOST']
-    print(f'docker host is: {dockhost}')
-    # if options.docker_host is not None:
-    #     compose_args.extend(['--host', options.docker_host])
     env_paths = (list(get_env_paths(components)) +
                  ([] if options.config_file is None else [options.config_file]))
     compose_args.extend(['--env-file', build_env_file(env_paths)])
@@ -173,6 +169,18 @@ def main():
     # we set COMPONENT_DEFAULT to a unique object, set it as valid, and set it as the default
     # then if no values are specified, argparse gives us COMPONENT_DEFAULT instead of a list
     components = [] if program_args.component is COMPONENT_DEFAULT else program_args.component
+    # If no components were listed to be started, perform docker compose down
+    if not components:
+        COMPONENTS.remove(COMPONENT_DEFAULT)
+        COMPONENTS.append('base')
+        env_paths = (list(get_env_paths(COMPONENTS)) +
+                     ([] if program_args.config_file is None else [program_args.config_file]))
+        compose_args = ['docker', 'compose']
+        compose_args.extend(['--env-file', build_env_file(env_paths)])
+        for compose_path in get_compose_paths(components):
+            compose_args.extend(['--file', compose_path])
+        subprocess.check_call(compose_args + ['down'])
+        quit()
     deploy(components, program_args)
     if program_args.init:
         initialise(program_args)
