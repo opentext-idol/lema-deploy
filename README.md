@@ -78,6 +78,12 @@ components are deployed: run the normal command to deploy, but without the `--in
 python3 deploy.py auth entity filestore analysis analysis-live audit api ui
 ```
 
+To stop and remove deployed LEMA services, run the Python `deploy.py` tool with no arguments:
+
+```
+python3 deploy.py
+```
+
 You can deploy components on different hosts, or deploy some components separately using a
 compatible implementation (read the `deploy.py` tool help text for a list of components).  For
 example, to use an existing object storage server and deploy the audit database on a separate host,
@@ -124,11 +130,3 @@ Docker volumes are created with the prefix `micro-focus-idol-lema_`, which can b
 
 All containers connect to a Docker network called `micro-focus-idol-lema_main`.  The
 `micro-focus-idol-lema` prefix can be changed using the `COMPOSE_PROJECT_NAME` setting.
-
-## Deployment teardown
-
-Stopping and removing of deployed services can be performed by running Python `deploy.py` tool with no arguments:
-
-```
-python3 deploy.py
-```
