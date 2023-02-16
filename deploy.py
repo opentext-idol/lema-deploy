@@ -103,7 +103,8 @@ def get_component_paths(options):
     extra_paths = [] if options.extra_components_path is None else options.extra_components_path
     components_paths = [os.path.join(BASE_PATH, 'docker-compose')] + extra_paths
     for components_path in components_paths:
-        for path in glob.iglob('docker-compose.*.yml', root_dir=components_path):
+        glob_path = os.path.join(glob.escape(components_path), 'docker-compose.*.yml')
+        for path in glob.iglob(glob_path):
             name = path[path.find('.') + 1:path.rfind('.')]
             component_paths[name] = os.path.join(components_path, path)
     return component_paths
