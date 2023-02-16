@@ -13,26 +13,19 @@
 #
 
 import argparse
+import glob
 import os
 import shutil
 import subprocess
 import sys
 import textwrap
 
-COMPONENT_DEFAULT = object()
-COMPONENTS = [
-    'auth',
-    'entity',
-    'filestore',
-    'analysis',
-    'analysis-live',
-    'audit',
-    'api',
-    'ui',
-]
-COMPONENTS_CHOICES = COMPONENTS + [COMPONENT_DEFAULT]
 BASE_PATH = os.path.dirname(os.path.abspath(sys.argv[0]))
 OUTPUT_WIDTH = min(100, shutil.get_terminal_size()[0])
+
+
+class ProgramError(Exception):
+    pass
 
 
 def wrap(text):
@@ -78,8 +71,7 @@ replacements, are:
 def parse_args():
     p = argparse.ArgumentParser(description=DESCRIPTION,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('component', nargs='*', default=COMPONENT_DEFAULT, choices=COMPONENTS_CHOICES,
-                   metavar='COMPONENT', help='components to deploy')
+    p.add_argument('component', nargs='*', metavar='COMPONENT', help='components to deploy')
     p.add_argument('--docker-host', metavar='HOST',
                    help='Docker host to run containers on (default: use Docker running locally)')
     p.add_argument('--init', action='store_const', const=True, default=False,
@@ -87,6 +79,8 @@ def parse_args():
     p.add_argument('--disable-encryption', action='store_const', const=True, default=False,
                    help='configure user-facing servers to accept HTTP connections (by default, '
                         'user-facing servers accept HTTPS connections)')
+    p.add_argument('--extra-components-path', action='append', metavar='DIR',
+                   help='directory containing custom component definitions')
     p.add_argument('--config-file', metavar='FILE',
                    help='path to a configuration file with values that override all other '
                         'configuration files')
@@ -95,6 +89,31 @@ def parse_args():
     p.add_argument('--skip-deploy', action='store_const', const=True, default=False,
                    help='don\'t start Docker containers')
     return p.parse_args()
+
+
+def run_process(args):
+    try:
+        subprocess.check_call(args)
+    except subprocess.CalledProcessError as e:
+        raise ProgramError(e)
+
+
+def get_component_paths(options):
+    component_paths = {}
+    extra_paths = [] if options.extra_components_path is None else options.extra_components_path
+    components_paths = [os.path.join(BASE_PATH, 'docker-compose')] + extra_paths
+    for components_path in components_paths:
+        for path in glob.iglob('docker-compose.*.yml', root_dir=components_path):
+            name = path[path.find('.') + 1:path.rfind('.')]
+            component_paths[name] = os.path.join(components_path, path)
+    return component_paths
+
+
+def validate_components(components, component_paths):
+    for component in components:
+        if component == 'base' or component not in component_paths:
+            raise ProgramError(f'invalid component: {component}',
+                               f'known components: {", ".join(component_paths.keys())}')
 
 
 def get_env_paths(components):
@@ -115,73 +134,79 @@ def build_env_file(env_paths):
     return target_path
 
 
-def get_compose_paths(components):
+def get_compose_paths(components, component_paths):
     for component in components:
-        path = os.path.join(BASE_PATH, 'docker-compose', f'docker-compose.{component}.yml')
-        if os.path.exists(path):
-            yield path
+        if component in component_paths:
+            yield component_paths[component]
 
 
-def get_compose_args(components, options, log_level):
+def get_compose_args(components, component_paths, options,
+                     command, detach=False, remove=False, log_level='info'):
+    # base should be first
+    compose_components = ['base'] + list(components)
     compose_args = ['docker', '--log-level', log_level]
     if options.docker_host is not None:
         compose_args.extend(['--host', options.docker_host])
     compose_args.append('compose')
-    env_paths = (list(get_env_paths(components)) +
+    env_paths = (list(get_env_paths(compose_components)) +
                  ([] if options.config_file is None else [options.config_file]))
     compose_args.extend(['--env-file', build_env_file(env_paths)])
-    for compose_path in get_compose_paths(components):
+    for compose_path in get_compose_paths(compose_components, component_paths):
         compose_args.extend(['--file', compose_path])
+    compose_args.append(command)
+    if detach:
+        compose_args.append('--detach')
+    if remove:
+        compose_args.append('--remove-orphans')
     return compose_args
 
 
-def run_compose(components, options, detach=True, remove=False, log_level='info'):
-    # base should be first
-    compose_args = get_compose_args(['base'] + list(components), options, log_level)
+def run_compose(components, component_paths, options, detach=True, remove=False, log_level='info'):
     if not options.skip_pull:
-        subprocess.check_call(compose_args + ['pull'])
-
+        run_process(get_compose_args(components, component_paths, options,
+                                     'pull', log_level=log_level))
     if not options.skip_deploy:
-        up_args = ['up']
-        if detach:
-            up_args.append('--detach')
-        if remove:
-            up_args.append('--remove-orphans')
-        subprocess.check_call(compose_args + up_args)
+        run_process(get_compose_args(components, component_paths, options,
+                                     'up', detach, remove, log_level=log_level))
 
 
-def deploy(components, options):
+def deploy(components, component_paths, options):
     components = list(components)
     if options.disable_encryption:
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, options, remove=True)
+    run_compose(components, component_paths, options, remove=True)
 
 
-def initialise(options):
+def initialise(component_paths, options):
     components = ['auth-setup']
     if options.disable_encryption:
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, options, detach=False, log_level='error')
+    run_compose(components, component_paths, options, detach=False, log_level='error')
 
 
 def main():
     program_args = parse_args()
-    # workaround for argparse bug: https://bugs.python.org/issue27227
-    # we set COMPONENT_DEFAULT to a unique object, set it as valid, and set it as the default
-    # then if no values are specified, argparse gives us COMPONENT_DEFAULT instead of a list
-    components = [] if program_args.component is COMPONENT_DEFAULT else program_args.component
+    component_paths = get_component_paths(program_args)
+
+    if program_args.component:
+        validate_components(program_args.component, component_paths)
+        deploy(program_args.component, component_paths, program_args)
+        if program_args.init:
+            initialise(component_paths, program_args)
+
     # If no components were listed to be started, perform docker compose down
-    if not components:
-        compose_args = get_compose_args(['base'] + COMPONENTS, program_args, log_level='error')
-        subprocess.check_call(compose_args + ['down'] + ['--remove-orphans'])
-        quit()
-    deploy(components, program_args)
-    if program_args.init:
-        initialise(program_args)
+    else:
+        run_process(get_compose_args(component_paths.keys(), component_paths, program_args,
+                                     'down', remove=True, log_level='error'))
 
 
-main()
+
+try:
+    main()
+except ProgramError as e:
+    print('error:', '\n'.join(map(str, e.args)), file=sys.stderr)
+    sys.exit(1)
