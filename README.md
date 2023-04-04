@@ -58,8 +58,8 @@ directory.  The required files are:
 - `config/https/api/tls.crt`: Server certificate for the API.
 - `config/https/auth/tls.key`: Private key for the authentication server.
 - `config/https/auth/tls.crt`: Server certificate for the authentication server.
-- `config/ui/auth/nginx.key`: Private key for the UI.
-- `config/ui/auth/nginx.crt`: Server certificate for the UI.
+- `config/https/ui/nginx.key`: Private key for the UI.
+- `config/https/ui/nginx.crt`: Server certificate for the UI.
 
 ## Further examples
 
