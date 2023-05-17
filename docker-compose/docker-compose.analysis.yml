@@ -20,6 +20,7 @@ services:
       - main
     ports:
       - ${ISOL_ANALYSIS_SERVICE_DOCKER_PORT}:8090
+    mac_address: 06-00-00-0A-00-01
     environment:
       - ISOL_AUDIT_DB_HOST=${ISOL_AUDIT_DB_HOST}
       - ISOL_AUDIT_DB_PORT=${ISOL_AUDIT_DB_PORT}
