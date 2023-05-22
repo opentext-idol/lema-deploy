@@ -19,12 +19,13 @@ services:
     networks:
       - main
     volumes:
-      - filestore-service-data:/data
+      - filestore-service-data:/filestoredata
     ports:
       - ${ISOL_FILESTORE_SERVICE_DOCKER_PORT}:8333
     environment:
       - ISOL_FILESTORE_SERVICE_USERNAME=${ISOL_FILESTORE_SERVICE_USERNAME}
       - ISOL_FILESTORE_SERVICE_PASSWORD=${ISOL_FILESTORE_SERVICE_PASSWORD}
+      - ISOL_FILESTORE_SERVICE_BUCKET=${ISOL_FILESTORE_SERVICE_BUCKET}
 
 volumes:
   filestore-service-data:
