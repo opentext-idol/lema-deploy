@@ -20,6 +20,7 @@ services:
       - main
     volumes:
       - ${ISOL_API_SERVICE_TLS_CERT_DIR}:/https
+      - entity-data:/data/entity
     ports:
       - ${ISOL_API_SERVICE_DOCKER_PORT}:${ISOL_API_SERVICE_INTERNAL_PORT}
     environment:
@@ -67,3 +68,6 @@ services:
       - ISOL_ENTITY_MAX_MAX_RESULTS=${ISOL_ENTITY_MAX_MAX_RESULTS}
       - ISOL_ENTITY_DEFAULT_MAX_RESULTS=${ISOL_ENTITY_DEFAULT_MAX_RESULTS}
       - ISOL_ENTITY_DEFAULT_MAX_SUGGEST_RESULTS=${ISOL_ENTITY_DEFAULT_MAX_SUGGEST_RESULTS}
+
+volumes:
+  entity-data:

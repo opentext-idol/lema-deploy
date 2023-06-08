@@ -50,7 +50,7 @@ of the settings.
 
 ## Encryption
 
-By default, the user-facing servers (authentication server, API, and UI) only accept encrypted 
+By default, the user-facing servers (authentication server, API, and UI) only accept encrypted
 connections.  For this to work, you must obtain TLS certificates and copy them into the `config` 
 directory.  The required files are:
 
@@ -60,6 +60,11 @@ directory.  The required files are:
 - `config/https/auth/tls.crt`: Server certificate for the authentication server.
 - `config/https/ui/nginx.key`: Private key for the UI.
 - `config/https/ui/nginx.crt`: Server certificate for the UI.
+
+## Entities database schema
+
+The entities database can be customized by modifying the file `data/entity/custom.yaml`.  The schema can only be
+customized once, before deploying the system.  Customizations are saved permanently in the `entity-data` volume.
 
 ## Further examples
 
@@ -116,14 +121,15 @@ while others listen on 127.0.0.1 only):
 Docker volumes are created with the prefix `opentext-idol-lema_`, which can be changed using the
 `COMPOSE_PROJECT_NAME` setting.  The following volumes are created:
 
-| **Component** | **Volume name**                        | **Purpose**                                      |
-|---------------|----------------------------------------|--------------------------------------------------|
-| auth          | auth-db-data                           | Authentication server configuration              |
-| entity        | entity-storagedb-data                  | Application data                                 |
-| entity        | entity-indexdb-data                    | Search index for application data                |
-| entity        | entity-indexdb-license-data            | Cache for license information                    |
-| filestore     | filestore-service-data                 | Uploaded and generated files                     |
-| audit         | audit-db-data                          | Audit logs                                       |
+| **Component** | **Volume name**               | **Purpose**                         |
+|---------------|-------------------------------|-------------------------------------|
+| auth          | auth-db-data                  | Authentication server configuration |
+| entity        | entity-storagedb-data         | Application data                    |
+| entity        | entity-indexdb-data           | Search index for application data   |
+| entity        | entity-indexdb-license-data   | Cache for license information       |
+| filestore     | filestore-service-data        | Uploaded and generated files        |
+| audit         | audit-db-data                 | Audit logs                          |
+| -             | entity-data                   | Schema for application data         |
 
 All containers connect to a Docker network called `opentext-idol-lema_main`.  The
 `opentext-idol-lema` prefix can be changed using the `COMPOSE_PROJECT_NAME` setting.

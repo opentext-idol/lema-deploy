@@ -163,13 +163,19 @@ def get_compose_args(components, component_paths, options,
     return compose_args
 
 
-def run_compose(components, component_paths, options, detach=True, remove=False, log_level='info'):
-    if not options.skip_pull:
+def run_compose(components, component_paths, options, skip_pull=False, detach=True, remove=False, log_level='info'):
+    if not skip_pull:
         run_process(get_compose_args(components, component_paths, options,
                                      'pull', log_level=log_level))
+    run_process(get_compose_args(components, component_paths, options,
+                                 'build', log_level=log_level))
     if not options.skip_deploy:
         run_process(get_compose_args(components, component_paths, options,
                                      'up', detach, remove, log_level=log_level))
+
+
+def prepare(component_paths, options):
+    run_compose(['data-entity'], component_paths, options, skip_pull=True, detach=False, log_level='error')
 
 
 def deploy(components, component_paths, options):
@@ -178,7 +184,7 @@ def deploy(components, component_paths, options):
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, component_paths, options, remove=True)
+    run_compose(components, component_paths, options, options.skip_pull, remove=True)
 
 
 def initialise(component_paths, options):
@@ -187,7 +193,7 @@ def initialise(component_paths, options):
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, component_paths, options, detach=False, log_level='error')
+    run_compose(components, component_paths, options, options.skip_pull, detach=False, log_level='error')
 
 
 def main():
@@ -196,6 +202,7 @@ def main():
 
     if program_args.component:
         validate_components(program_args.component, component_paths)
+        prepare(component_paths, program_args)
         deploy(program_args.component, component_paths, program_args)
         if program_args.init:
             initialise(component_paths, program_args)

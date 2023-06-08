@@ -1,0 +1,19 @@
+# This file can be used to extend the entities database schema with custom entities, links, and properties.
+
+components:
+  schemas: {}
+
+entities: {}
+
+# example extension of an entity to add a property
+#entities:
+#  PersonEntity:
+#    extension: true
+#    properties:
+#      profession:
+#        description: Last known type of employment
+#        valueSchema:
+#          type: string
+#          maxLength: 100
+
+links: {}
