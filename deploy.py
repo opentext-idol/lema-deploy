@@ -163,19 +163,25 @@ def get_compose_args(components, component_paths, options,
     return compose_args
 
 
-def run_compose(components, component_paths, options, skip_pull=False, detach=True, remove=False, log_level='info'):
-    if not skip_pull:
+def run_compose(components, component_paths, options, detach=True, remove=False, log_level='info'):
+    if not options.skip_pull:
         run_process(get_compose_args(components, component_paths, options,
                                      'pull', log_level=log_level))
     run_process(get_compose_args(components, component_paths, options,
-                                 'build', log_level=log_level))
+                                 'build', log_level=log_level) +
+                ([] if options.skip_pull else ['--pull']))
     if not options.skip_deploy:
         run_process(get_compose_args(components, component_paths, options,
                                      'up', detach, remove, log_level=log_level))
 
 
 def prepare(component_paths, options):
-    run_compose(['data-entity'], component_paths, options, skip_pull=True, detach=False, log_level='error')
+    run_process(get_compose_args(['data-entity'], component_paths, options,
+                                 'build', log_level='error') +
+                ([] if options.skip_pull else ['--pull']))
+    if not options.skip_deploy:
+        run_process(get_compose_args(['data-entity'], component_paths, options,
+                                     'up', log_level='error'))
 
 
 def deploy(components, component_paths, options):
@@ -184,7 +190,7 @@ def deploy(components, component_paths, options):
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, component_paths, options, options.skip_pull, remove=True)
+    run_compose(components, component_paths, options, remove=True)
 
 
 def initialise(component_paths, options):
@@ -193,7 +199,7 @@ def initialise(component_paths, options):
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, component_paths, options, options.skip_pull, detach=False, log_level='error')
+    run_compose(components, component_paths, options, detach=False, log_level='error')
 
 
 def main():
