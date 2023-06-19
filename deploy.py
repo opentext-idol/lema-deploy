@@ -155,7 +155,7 @@ def get_compose_args(components, component_paths, options,
     compose_args.extend(['--env-file', build_env_file(env_paths)])
     for compose_path in get_compose_paths(compose_components, component_paths):
         compose_args.extend(['--file', compose_path])
-    compose_args.append(command)
+    compose_args.extend(command)
     if detach:
         compose_args.append('--detach')
     if remove:
@@ -164,20 +164,16 @@ def get_compose_args(components, component_paths, options,
 
 
 def run_compose(components, component_paths, options, skip_pull, detach=True, remove=False, log_level='info'):
-    if not skip_pull:
-        run_process(get_compose_args(components, component_paths, options,
-                                     'pull', log_level=log_level) + ['--ignore-buildable'])
-    run_process(get_compose_args(components, component_paths, options,
-                                 'build', log_level=log_level))
-    if not options.skip_deploy:
-        run_process(get_compose_args(components, component_paths, options,
-                                     'up', detach, remove, log_level=log_level))
+    command = ['up', f'--pull={"never" if skip_pull else "always"}', '--build']
+    if options.skip_deploy:
+        command.append('--no-start')
+    run_process(get_compose_args(components, component_paths, options, command, detach, remove, log_level=log_level))
 
 
 def prepare(component_paths, options):
     if not options.skip_pull:
         run_process(get_compose_args(['data-entity-deps'], component_paths, options,
-                                     'pull', log_level='error'))
+                                     ['pull'], log_level='error'))
     run_compose(['data-entity'], component_paths, options, skip_pull=True, detach=False, log_level='error')
 
 
@@ -213,7 +209,7 @@ def main():
     # If no components were listed to be started, perform docker compose down
     else:
         run_process(get_compose_args(component_paths.keys(), component_paths, program_args,
-                                     'down', remove=True, log_level='error'))
+                                     ['down'], remove=True, log_level='error'))
 
 
 
