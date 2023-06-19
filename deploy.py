@@ -166,7 +166,7 @@ def get_compose_args(components, component_paths, options,
 def run_compose(components, component_paths, options, skip_pull, detach=True, remove=False, log_level='info'):
     if not skip_pull:
         run_process(get_compose_args(components, component_paths, options,
-                                     'pull', log_level=log_level) + ['--ignore-pull-failures'])
+                                     'pull', log_level=log_level) + ['--ignore-buildable'])
     run_process(get_compose_args(components, component_paths, options,
                                  'build', log_level=log_level))
     if not options.skip_deploy:
