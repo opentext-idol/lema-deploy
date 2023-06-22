@@ -170,12 +170,6 @@ def run_compose(components, component_paths, options, skip_pull, detach=True, re
     run_process(get_compose_args(components, component_paths, options, command, detach, remove, log_level=log_level))
 
 
-def prepare(component_paths, options):
-    if not options.skip_pull:
-        run_process(get_compose_args(['data-entity-deps'], component_paths, options,
-                                     ['pull'], log_level='error'))
-
-
 def deploy(components, component_paths, options):
     components = list(components)
     if options.disable_encryption:
@@ -200,7 +194,6 @@ def main():
 
     if program_args.component:
         validate_components(program_args.component, component_paths)
-        prepare(component_paths, program_args)
         deploy(program_args.component + ['data-entity'], component_paths, program_args)
         if program_args.init:
             initialise(component_paths, program_args)
