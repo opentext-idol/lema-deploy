@@ -16,7 +16,7 @@ services:
 
   lema-data-entity:
     image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-lema-data-entity${ISOL_DOCKER_VERSION_SEP}${LEMA_DATA_VERSION}
-    # create a container but don't do anything - so jenkins-deploy can see the image
+    # create a container but don't do anything, so the container is available to list to discover all required images
     entrypoint: "true"
     networks:
       - main
