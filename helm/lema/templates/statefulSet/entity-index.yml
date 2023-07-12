@@ -1,0 +1,62 @@
+{{- if .Values.entity.index.enabled -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.entity.index.name }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.entity.index.name }}
+  serviceName: {{ .Values.entity.index.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.entity.index.name }}
+
+    spec:
+      containers:
+        - name:  {{ .Values.entity.index.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.entity.index.image
+  "version" .Values.docker.versions.base
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 9100
+            - containerPort: 9101
+          envFrom:
+            - configMapRef:
+                name:  {{ .Values.entity.index.config }}
+          volumeMounts:
+            - name: {{ .Values.entity.index.dataVolume }}
+              mountPath: /content/index
+
+      volumes:
+        - name: {{ .Values.entity.index.dataVolume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.entity.index.dataVolumeClaim }}
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.entity.index.service.name }}
+
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.entity.index.name }}
+  ports:
+    - name: query
+      port: {{ .Values.entity.index.service.queryPort }}
+      targetPort: 9100
+    - name: index
+      port: {{ .Values.entity.index.service.indexPort }}
+      targetPort: 9101
+{{- end -}}

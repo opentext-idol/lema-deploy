@@ -1,0 +1,69 @@
+{{- if .Values.audit.enabled -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.audit.name }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.audit.name }}
+  serviceName: {{ .Values.audit.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.audit.name }}
+
+    spec:
+      containers:
+        - name: {{ .Values.audit.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.audit.image
+  "version" .Values.docker.versions.base
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: {{ .Values.audit.secret }}
+            - configMapRef:
+                name: {{ .Values.audit.config }}
+          volumeMounts:
+            - name: {{ .Values.audit.dataVolume }}
+              mountPath: /var/lib/postgresql/data
+          startupProbe:
+{{ include "probe.postgres" (dict "username" .Values.audit.username) | indent 12 }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+{{ include "probe.postgres" (dict "username" .Values.audit.username) | indent 12 }}
+            failureThreshold: 2
+          livenessProbe:
+{{ include "probe.postgres" (dict "username" .Values.audit.username) | indent 12 }}
+            periodSeconds: 60
+            failureThreshold: 20
+      volumes:
+        - name: {{ .Values.audit.dataVolume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.audit.dataVolumeClaim }}
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.audit.service.name }}
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.audit.name }}
+  ports:
+    - name: tcp
+      port: {{ .Values.audit.service.port }}
+      targetPort: 5432
+{{- end -}}

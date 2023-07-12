@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.api.authSetup.config }}
+data:
+  ISOL_AUTH_SERVICE_PROTOCOL: "{{ .Values.auth.service.protocol }}"
+  ISOL_AUTH_SERVICE_HOST: "{{ .Values.auth.service.name }}"
+  ISOL_AUTH_SERVICE_PORT: "{{ .Values.auth.service.port }}"
+  ISOL_AUTH_SERVICE_PATH: "/{{ .Values.auth.service.path }}/"
+  ISOL_AUTH_SERVICE_REALM: "{{ .Values.auth.realm }}"
+  ISOL_AUTH_SERVICE_API_CLIENT: "{{ .Values.auth.apiClient}}"
+  ISOL_AUTH_SERVICE_API_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}:{{ .Values.external.port }}{{ .Values.auth.external.path }}"
+  ISOL_AUTH_SERVICE_UI_CLIENT: "{{ .Values.auth.uiClient }}"
+  ISOL_AUTH_SERVICE_UI_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}{{ .Values.lemaUi.external.path }}*"
+  ISOL_AUTH_SERVICE_TOKEN_EXPIRY_TIME: "{{ .Values.auth.tokenExpiryTime }}"
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.api.authSetup.secret }}
+data:
+  ISOL_AUTH_SERVICE_ADMIN_USER: "{{ .Values.auth.adminUser | b64enc }}"
+  ISOL_AUTH_SERVICE_ADMIN_PASS: "{{ .Values.auth.adminPassword | b64enc }}"
+  ISOL_AUTH_SERVICE_API_CLIENT_SECRET: "{{ .Values.auth.apiClientSecret | b64enc }}"
+

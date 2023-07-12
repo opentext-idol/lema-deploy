@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.filestore.secret }}
+data:
+  ISOL_FILESTORE_SERVICE_USERNAME: {{ .Values.filestore.username | b64enc}}
+  ISOL_FILESTORE_SERVICE_PASSWORD: {{ .Values.filestore.password | b64enc }}
+  ISOL_FILESTORE_SERVICE_BUCKET: {{ .Values.filestore.bucket | b64enc}}

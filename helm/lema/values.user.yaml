@@ -1,0 +1,52 @@
+# These values are required before deploying
+
+# External licenseserver host and port
+licenseServer:
+  ip:
+  port: 20000
+
+# The external hostname of the server running Kubernetes
+external:
+  host:
+
+# Base64-encoded JSON config with docker-login credentials
+# Can create by running
+#   kubectl create secret docker-registry docker-secret --dry-run=client -o yaml --docker-username=microfocusidolreadonly --docker-password=<token>
+# and copying the .dockerconfigjson
+secret:
+  base64dockerconfigjson:
+
+# It is recommended to review the below passwords and maximum volume sizes before deploying
+auth:
+  adminUser: lema-auth
+  adminPassword: lema-auth
+  realm: lema
+  apiClient: lema_api
+  apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87
+  uiClient: lema_ui
+  db:
+    username: lema
+    password: lema
+    database: lema-auth
+    dataVolumeSize: 1Gi
+
+filestore:
+  enabled: true
+  dataVolumeSize: 10Gi
+  username: lema-filestore
+  password: lema-filestore
+  bucket: lema-filestore
+
+audit:
+  dataVolumeSize: 1Gi
+  username: audit-user
+  password: audit-pass
+  database: auditDb
+
+entity:
+  index:
+    dataVolumeSize: 5Gi
+  storage:
+    dataVolumeSize: 5Gi
+    maxHeapSize: 500M
+    heapNewSize: 100M

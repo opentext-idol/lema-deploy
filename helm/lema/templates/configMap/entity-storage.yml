@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.entity.storage.config }}
+data:
+  {{- if .Values.entity.storage.maxHeapSize }}
+  MAX_HEAP_SIZE: "{{ .Values.entity.storage.maxHeapSize }}"
+  {{- end -}}
+  {{- if .Values.entity.storage.heapNewSize }}
+  HEAP_NEWSIZE: "{{ .Values.entity.storage.heapNewSize }}"
+  {{- end -}}

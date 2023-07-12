@@ -1,0 +1,55 @@
+{{- if .Values.entity.storage.enabled -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.entity.storage.name }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.entity.storage.name }}
+  serviceName: {{ .Values.entity.storage.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.entity.storage.name }}
+
+    spec:
+      containers:
+        - name: {{ .Values.entity.storage.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.entity.storage.image
+  "version" .Values.docker.versions.base
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 9042
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.entity.storage.config }}
+          volumeMounts:
+            - name: {{ .Values.entity.storage.dataVolume }}
+              mountPath: /var/lib/cassandra
+      volumes:
+        - name: {{ .Values.entity.storage.dataVolume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.entity.storage.dataVolumeClaim }}
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.entity.storage.service.name }}
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.entity.storage.name }}
+  ports:
+    - name: tcp
+      port: {{ .Values.entity.storage.service.port }}
+      targetPort: 9042
+{{- end -}}

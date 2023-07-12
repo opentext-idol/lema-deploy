@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.analysis.config }}
+data:
+  ISOL_AUDIT_DB_HOST: "{{ .Values.audit.service.name }}"
+  ISOL_AUDIT_DB_PORT: "{{ .Values.audit.service.port }}"
+  ISOL_AUDIT_DB_NAME: "{{ .Values.audit.database }}"
+  ISOL_LICENSE_SERVER_HOST: "{{ .Values.licenseServer.service.name }}"
+
+  ISOL_LICENSE_SERVER_PORT: "{{ .Values.licenseServer.port }}"
+  ISOL_ENTITY_STORAGEDB_HOST: "{{ .Values.entity.storage.service.name }}"
+  ISOL_ENTITY_STORAGEDB_PORT: "{{ .Values.entity.storage.service.port }}"
+  ISOL_ENTITY_INDEXDB_HOST: "{{ .Values.entity.index.service.name }}"
+  ISOL_ENTITY_INDEXDB_ACI_PORT: "{{ .Values.entity.index.service.queryPort }}"
+  ISOL_ENTITY_INDEXDB_INDEX_PORT: "{{ .Values.entity.index.service.indexPort }}"
+  ISOL_FILE_STORE_URL: "{{ .Values.filestore.service.protocol }}://{{ .Values.filestore.service.name }}:{{ .Values.filestore.service.port }}{{ .Values.filestore.service.path }}"
+  ISOL_FILE_STORE_BUCKET: "{{ .Values.filestore.bucket }}"
+  ISOL_ANALYSIS_FACE_DEC_THREADS: "2"
+  ISOL_ANALYSIS_VEHICLE_THREADS: "2"
+  ISOL_ANALYSIS_OBJECT_THREADS: "2"
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.analysis.secret }}
+data:
+  ISOL_AUDIT_DB_USERNAME: {{ .Values.audit.username | b64enc }}
+  ISOL_AUDIT_DB_PASSWORD: {{ .Values.audit.password | b64enc }}
+  ISOL_FILE_STORE_USER: {{ .Values.filestore.username | b64enc }}
+  ISOL_FILE_STORE_PASSWORD: {{ .Values.filestore.password | b64enc }}

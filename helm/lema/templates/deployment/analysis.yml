@@ -1,0 +1,64 @@
+{{- if .Values.analysis.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.analysis.name }}
+spec:
+  replicas: {{ .Values.analysis.replicas }}
+  selector:
+    matchLabels:
+      component: {{ .Values.analysis.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.analysis.name }}
+
+    spec:
+      containers:
+        - name: {{ .Values.analysis.container }}
+{{ include "image" (dict
+                      "Values" .Values
+                      "imageName" .Values.analysis.image
+                      "version" .Values.docker.versions.analysis
+                    ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 8090
+            - containerPort: 8091
+          envFrom:
+            - secretRef:
+                name: {{ .Values.analysis.secret }}
+            - configMapRef:
+                name: {{ .Values.analysis.config }}
+          startupProbe:
+{{ include "probe.nifi" . | indent 12 }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+{{ include "probe.nifi" . | indent 12 }}
+            failureThreshold: 2
+          livenessProbe:
+{{ include "probe.nifi" . | indent 12 }}
+            periodSeconds: 60
+            failureThreshold: 20
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.analysis.service.name }}
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.analysis.name }}
+  ports:
+    - name: http
+      port: {{ .Values.analysis.service.port }}
+      targetPort: 8090
+    - name: jobs
+      port: {{ .Values.analysis.service.jobsPort }}
+      targetPort: 8091
+{{- end -}}

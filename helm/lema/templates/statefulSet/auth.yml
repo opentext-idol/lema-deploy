@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.auth.name }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.auth.name }}
+  serviceName: {{ .Values.auth.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.auth.name }}
+
+    spec:
+      containers:
+        - name: {{ .Values.auth.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.auth.image
+  "version" .Values.docker.versions.base
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: {{ .Values.auth.secret }}
+            - configMapRef:
+                name: {{ .Values.auth.config }}
+          startupProbe:
+{{ include "probe.keycloak" . | indent 12 }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 10
+          readinessProbe:
+{{ include "probe.keycloak" .| indent 12 }}
+            failureThreshold: 2
+          livenessProbe:
+{{ include "probe.keycloak" . | indent 12 }}
+            periodSeconds: 60
+            failureThreshold: 20
+
+        - name: {{ .Values.auth.db.container }}
+          image: "postgres:{{ .Values.docker.versions.postgres }}"
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.auth.db.config }}
+          volumeMounts:
+            - name: {{ .Values.auth.db.dataVolume }}
+              mountPath: /var/lib/postgresql/data
+          startupProbe:
+{{ include "probe.postgres" (dict "username" .Values.auth.db.username) | indent 12 }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+{{ include "probe.postgres" (dict "username" .Values.auth.db.username) | indent 12 }}
+            failureThreshold: 2
+          livenessProbe:
+{{ include "probe.postgres" (dict "username" .Values.auth.db.username) | indent 12 }}
+            periodSeconds: 60
+            failureThreshold: 20
+      volumes:
+        - name: {{ .Values.auth.db.dataVolume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.auth.db.dataVolumeClaim }}
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.auth.service.name }}
+spec:
+  type: NodePort
+  selector:
+    component: {{ .Values.auth.name }}
+  ports:
+    - name: http
+      port: {{ .Values.auth.service.port }}
+      targetPort: 8080
+      nodePort: 30020

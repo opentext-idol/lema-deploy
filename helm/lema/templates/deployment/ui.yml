@@ -1,0 +1,60 @@
+{{- if .Values.lemaUi.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.lemaUi.name }}
+
+spec:
+  replicas: {{ .Values.lemaUi.replicas }}
+  selector:
+    matchLabels:
+      component: {{ .Values.lemaUi.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.lemaUi.name }}
+    spec:
+      containers:
+        - name: {{ .Values.lemaUi.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.lemaUi.image
+  "version" .Values.docker.versions.lema
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.lemaUi.config }}
+          startupProbe:
+{{ include "probe.lema" . | indent 12 }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+{{ include "probe.lema" . | indent 12 }}
+            failureThreshold: 2
+          livenessProbe:
+{{ include "probe.lema" . | indent 12 }}
+            periodSeconds: 60
+            failureThreshold: 20
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.lemaUi.service.name }}
+
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.lemaUi.name }}
+  ports:
+    - name: http
+      port: {{ .Values.lemaUi.service.port }}
+      targetPort: 80
+{{- end -}}

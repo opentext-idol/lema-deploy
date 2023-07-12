@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.lemaUi.config }}
+data:
+
+  ISOL_API_SERVICE_EXTERNAL_HOST: "{{ .Values.external.host }}"
+  ISOL_API_SERVICE_EXTERNAL_PORT: "{{ .Values.external.port }}"
+  ISOL_API_SERVICE_EXTERNAL_PATH: "{{ .Values.api.external.path }}"
+
+  ISOL_EXTERNAL_PROTOCOL: "{{ .Values.external.protocol }}"
+  LEMA_UI_EXTERNAL_HOST: "{{ .Values.external.host }}"
+  LEMA_UI_EXTERNAL_PORT: "{{ .Values.external.port }}"
+  LEMA_UI_EXTERNAL_PATH: "{{ .Values.lemaUi.external.path }}"
+
+  ISOL_AUTH_SERVICE_REALM: "{{ .Values.auth.realm }}"
+  ISOL_AUTH_SERVICE_UI_CLIENT: "{{ .Values.auth.uiClient }}"
+  ISOL_AUTH_SERVICE_EXTERNAL_HOST: "{{ .Values.external.host }}"
+  ISOL_AUTH_SERVICE_EXTERNAL_PORT: "{{ .Values.external.port }}"
+  ISOL_AUTH_SERVICE_EXTERNAL_PATH: "{{ .Values.auth.external.path }}"
+
+
+

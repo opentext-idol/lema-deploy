@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.audit.config }}
+data:
+  POSTGRES_DB: "{{ .Values.audit.database }}"
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.audit.secret }}
+data:
+  POSTGRES_USER: {{ .Values.audit.username | b64enc }}
+  POSTGRES_PASSWORD: {{ .Values.audit.password | b64enc }}

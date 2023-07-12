@@ -1,0 +1,92 @@
+{{- if .Values.api.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.api.name }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component:  {{ .Values.api.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.api.name }}
+    spec:
+      initContainers:
+        - name: {{ .Values.api.dataEntity.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.api.dataEntity.image
+  "version" .Values.docker.versions.api
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          volumeMounts:
+            - name: {{ .Values.api.dataVolume }}
+              mountPath: /target-volume
+        - name: {{ .Values.api.authSetup.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.api.authSetup.image
+  "version" .Values.docker.versions.api
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.api.authSetup.secret }}
+            - configMapRef:
+                name: {{ .Values.api.authSetup.config }}
+      containers:
+        - name: api-service-container
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.api.image
+  "version" .Values.docker.versions.api
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.api.internalPort }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.api.secret }}
+            - configMapRef:
+                name: {{ .Values.api.config }}
+          volumeMounts:
+            - name: {{ .Values.api.dataVolume }}
+              mountPath: /data/entity
+              readOnly: true
+          startupProbe:
+{{ include "probe.api" . | indent 12 }}
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+{{ include "probe.api" . | indent 12 }}
+            failureThreshold: 2
+          livenessProbe:
+{{ include "probe.api" . | indent 12 }}
+            periodSeconds: 60
+            failureThreshold: 20
+
+      volumes:
+        - name: {{ .Values.api.dataVolume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.api.dataVolumeClaim }}
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.api.service.name }}
+spec:
+  type: NodePort
+  selector:
+    component: {{ .Values.api.name }}
+  ports:
+    - name: http
+      port: {{ .Values.api.service.port }}
+      targetPort: 8080
+{{- end -}}

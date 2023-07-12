@@ -1,0 +1,68 @@
+{{- if .Values.filestore.enabled -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.filestore.name }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.filestore.name }}
+  serviceName: {{ .Values.filestore.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.filestore.name }}
+
+    spec:
+      containers:
+        - name: {{ .Values.filestore.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.filestore.image
+  "version" .Values.docker.versions.base
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 8333
+          envFrom:
+            - secretRef:
+                name: {{ .Values.filestore.secret }}
+          volumeMounts:
+            - name: {{ .Values.filestore.dataVolume }}
+              mountPath: /filestoredata
+          startupProbe:
+{{ include "probe.seaweedfs" . | indent 12 }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+{{ include "probe.seaweedfs" . | indent 12 }}
+            failureThreshold: 2
+          livenessProbe:
+{{ include "probe.seaweedfs" . | indent 12 }}
+            periodSeconds: 60
+            failureThreshold: 20
+      volumes:
+        - name: {{ .Values.filestore.dataVolume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.filestore.dataVolumeClaim }}
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.filestore.service.name }}
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.filestore.name }}
+  ports:
+    - name: http
+      targetPort: 8333
+      port: {{ .Values.filestore.service.port }}
+{{- end -}}

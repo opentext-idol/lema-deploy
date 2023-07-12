@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.entity.index.config }}
+data:
+  ISOL_LICENSE_SERVER_HOST: "{{ .Values.licenseServer.service.name}}"
+  ISOL_LICENSE_SERVER_PORT: "{{ .Values.licenseServer.service.port }}"
