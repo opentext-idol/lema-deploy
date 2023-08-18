@@ -54,6 +54,7 @@ The components that can only be deployed using this script are:
 - entity: storage for application data
 - analysis: media analysis system
 - analysis-live: live media analysis system
+- dataset-locations: database of global locations
 - api: user-facing web server
 - ui: user-facing web server
 

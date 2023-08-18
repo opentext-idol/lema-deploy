@@ -27,7 +27,7 @@ Run the `deploy.py` tool using Python.  (Much like when running `docker`, you
 may have to run it as a different user with sufficient permissions to manage Docker containers.)
 
 ```
-python3 deploy.py --init auth entity filestore analysis audit api ui
+python3 deploy.py --init auth entity filestore analysis audit dataset-locations api ui
 ```
 
 With the default configuration, the LEMA UI will be available at `https://localhost:8070` once the
@@ -71,7 +71,7 @@ customized once, before deploying the system.  Customizations are saved permanen
 To use HTTP instead of HTTPS, for testing purposes only, run:
 
 ```
-python3 deploy.py --disable-encryption --init auth entity filestore analysis audit api ui
+python3 deploy.py --disable-encryption --init auth entity filestore analysis audit dataset-locations api ui
 ```
 
 > note: changes to the encryption state of a deployed system require manual deletion of the realm in Keycloak before running `deploy.py` with the new state.
@@ -80,7 +80,7 @@ To resume a stopped LEMA system, or to apply changes made to configuration files
 components are deployed: run the normal command to deploy, but without the `--init` argument:
 
 ```
-python3 deploy.py auth entity filestore analysis audit api ui
+python3 deploy.py auth entity filestore analysis audit dataset-locations api ui
 ```
 
 To stop and remove deployed LEMA services, run the Python `deploy.py` tool with no arguments:
@@ -105,31 +105,33 @@ python3 deploy.py --init auth entity analysis api ui
 By default, the following ports are forwarded ('public' ports listen on all interfaces (0.0.0.0),
 while others listen on 127.0.0.1 only):
 
-| **Component** | **Port** | **Public** | **Purpose**                                                          |
-|---------------|----------|------------|----------------------------------------------------------------------|
-| auth          | 8000     | no         | PostgreSQL database storing authentication server configuration      |
-| auth          | 8010     | yes        | Keycloak authentication server (API and admin UI)                    |
-| entity        | 8021     | no         | ACI port of IDOL Content database backend for the Gremlin database   |
-| entity        | 8022     | no         | Index port of IDOL Content database backend for the Gremlin database |
-| entity        | 8023     | no         | Port of Cassandra database backend for the Gremlin database          |
-| filestore     | 8030     | no         | S3-compatible object storage                                         |
-| analysis      | 8040     | no         | NiFi server for media analysis (API and admin UI)                    |
-| audit         | 8050     | no         | PostgreSQL database storing audit logs                               |
-| api           | 8060     | yes        | System HTTP API                                                      |
-| ui            | 8070     | yes        | LEMA UI                                                              |
+| **Component**     | **Port** | **Public** | **Purpose**                                                          |
+|-------------------|----------|------------|----------------------------------------------------------------------|
+| auth              | 8000     | no         | PostgreSQL database storing authentication server configuration      |
+| auth              | 8010     | yes        | Keycloak authentication server (API and admin UI)                    |
+| entity            | 8021     | no         | ACI port of IDOL Content database backend for the Gremlin database   |
+| entity            | 8022     | no         | Index port of IDOL Content database backend for the Gremlin database |
+| entity            | 8023     | no         | Port of Cassandra database backend for the Gremlin database          |
+| filestore         | 8030     | no         | S3-compatible object storage                                         |
+| analysis          | 8040     | no         | NiFi server for media analysis (API and admin UI)                    |
+| audit             | 8050     | no         | PostgreSQL database storing audit logs                               |
+| dataset-locations | 8100     | no         | ACI port of IDOL Content database backend for the locations database |
+| api               | 8060     | yes        | System HTTP API                                                      |
+| ui                | 8070     | yes        | LEMA UI                                                              |
 
 Docker volumes are created with the prefix `opentext-idol-lema_`, which can be changed using the
 `COMPOSE_PROJECT_NAME` setting.  The following volumes are created:
 
-| **Component** | **Volume name**               | **Purpose**                         |
-|---------------|-------------------------------|-------------------------------------|
-| auth          | auth-db-data                  | Authentication server configuration |
-| entity        | entity-storagedb-data         | Application data                    |
-| entity        | entity-indexdb-data           | Search index for application data   |
-| entity        | entity-indexdb-license-data   | Cache for license information       |
-| filestore     | filestore-service-data        | Uploaded and generated files        |
-| audit         | audit-db-data                 | Audit logs                          |
-| -             | entity-data                   | Schema for application data         |
+| **Component**     | **Volume name**                | **Purpose**                         |
+|-------------------|--------------------------------|-------------------------------------|
+| auth              | auth-db-data                   | Authentication server configuration |
+| entity            | entity-storagedb-data          | Application data                    |
+| entity            | entity-indexdb-data            | Search index for application data   |
+| entity            | entity-indexdb-license-data    | Cache for license information       |
+| filestore         | filestore-service-data         | Uploaded and generated files        |
+| audit             | audit-db-data                  | Audit logs                          |
+| dataset-locations | dataset-locations-license-data | Cache for license information       |
+| -                 | entity-data                    | Schema for application data         |
 
 All containers connect to a Docker network called `opentext-idol-lema_main`.  The
 `opentext-idol-lema` prefix can be changed using the `COMPOSE_PROJECT_NAME` setting.
