@@ -24,6 +24,7 @@ docker:
     api: 23.3.0
     datasets: 23.3.0
     analysis: 23.3.0
+    lemaData: 23.3.0
     lema: 23.3.0
     postgres: 14.4
 

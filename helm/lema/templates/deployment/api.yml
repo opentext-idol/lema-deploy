@@ -19,7 +19,7 @@ spec:
 {{ include "image" (dict
   "Values" .Values
   "imageName" .Values.api.dataEntity.image
-  "version" .Values.docker.versions.api
+  "version" .Values.docker.versions.lemaData
   ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           volumeMounts:
