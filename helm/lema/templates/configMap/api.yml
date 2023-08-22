@@ -25,6 +25,10 @@ data:
   ISOL_FILE_STORE_PORT: "{{ .Values.filestore.service.port }}"
   ISOL_FILE_STORE_PATH: "{{ .Values.filestore.service.path }}"
   ISOL_FILE_STORE_BUCKET: "{{ .Values.filestore.bucket }}"
+
+  ISOL_DATASETS_LOCATIONS_DB_HOST: "{{ .Values.datasets.locations.service.name }}"
+  ISOL_DATASETS_LOCATIONS_DB_ACI_PORT: "{{ .Values.datasets.locations.service.queryPort }}"
+
   ISOL_ANALYSIS_HOST: "{{ .Values.analysis.service.name }}"
   ISOL_ANALYSIS_API_PORT: "{{ .Values.analysis.service.port }}"
   ISOL_ANALYSIS_API_PATH: "{{ .Values.analysis.service.path }}"

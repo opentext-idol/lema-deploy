@@ -22,6 +22,7 @@ docker:
   versions:
     base: 23.3.0
     api: 23.3.0
+    datasets: 23.3.0
     analysis: 23.3.0
     lema: 23.3.0
     postgres: 14.4
@@ -145,6 +146,23 @@ entity:
     service:
       name: entity-storage-db-service
       port: 9042
+
+datasets:
+  locations:
+    enabled: true
+    name: dataset-locations-db
+    container: dataset-locations-db-container
+    image: solutions-dataset-locations
+    config: dataset-locations-db-config
+    dataVolume: dataset-locations-db-data
+    dataVolumeClaim: dataset-locations-db-data
+    dataVolumeSize: 2Gi
+    service:
+      name: dataset-locations-db-service
+      queryPort: 9100
+    ingress:
+      enabled: false
+      path: /datasets/locations/db/
 
 api:
   enabled: true

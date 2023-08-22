@@ -1,0 +1,51 @@
+{{- if .Values.datasets.locations.enabled -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.datasets.locations.name }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ .Values.datasets.locations.name }}
+  serviceName: {{ .Values.datasets.locations.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.datasets.locations.name }}
+
+    spec:
+      containers:
+        - name:  {{ .Values.datasets.locations.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.datasets.locations.image
+  "version" .Values.docker.versions.datasets
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          ports:
+            - containerPort: 9100
+          envFrom:
+            - configMapRef:
+                name:  {{ .Values.datasets.locations.config }}
+
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.datasets.locations.service.name }}
+
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ .Values.datasets.locations.name }}
+  ports:
+    - name: query
+      port: {{ .Values.datasets.locations.service.queryPort }}
+      targetPort: 9100
+{{- end -}}
