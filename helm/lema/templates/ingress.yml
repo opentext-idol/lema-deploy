@@ -21,7 +21,7 @@ spec:
                 name: {{ .Values.lemaUi.service.name }}
                 port:
                   number: {{ .Values.lemaUi.service.port }}
-          - path: /({{ .Values.auth.service.path }})(.*)
+          - path: {{ .Values.auth.external.path }}(.*)
             pathType: Prefix
             backend:
               service:

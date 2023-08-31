@@ -12,7 +12,7 @@ data:
   ISOL_AUTH_SERVICE_PROTOCOL: "{{ .Values.auth.service.protocol }}"
   ISOL_AUTH_SERVICE_HOST: "{{ .Values.auth.service.name }}"
   ISOL_AUTH_SERVICE_PORT: "{{ .Values.auth.service.port }}"
-  ISOL_AUTH_SERVICE_PATH: "/{{ .Values.auth.service.path }}/"
+  ISOL_AUTH_SERVICE_PATH: "{{ .Values.auth.service.path }}"
   ISOL_AUTH_SERVICE_EXTERNAL_PROTOCOL: "{{ .Values.external.protocol }}"
   ISOL_AUTH_SERVICE_EXTERNAL_HOST: "{{ .Values.external.host }}"
   ISOL_AUTH_SERVICE_EXTERNAL_PORT: "{{ .Values.external.port }}"

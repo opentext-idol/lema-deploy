@@ -16,12 +16,7 @@ metadata:
 data:
   KEYCLOAK_DATABASE_HOST: "localhost"
   KEYCLOAK_DATABASE_SCHEMA: "public"
-  {{- if eq .Values.external.protocol "http" }}
-  KC_HOSTNAME_STRICT_HTTPS: "false"
-  {{- end}}
-  KC_HOSTNAME: "{{ .Values.external.host }}"
-  KC_HOSTNAME_PORT: "{{ .Values.external.port }}"
-  KC_HTTP_RELATIVE_PATH: "/{{ .Values.auth.service.path }}"
+  KC_HOSTNAME_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}:{{ .Values.external.port }}{{ .Values.auth.external.path }}"
 
 ---
 

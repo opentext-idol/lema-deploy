@@ -49,8 +49,7 @@ auth:
     name: auth-service
     port: 8080
     protocol: http
-    # must match auth.external.path, but without leading/trailing '/'
-    path: auth
+    path: /
   db:
     config: auth-db-config
     container: auth-service-db

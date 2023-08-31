@@ -9,7 +9,7 @@ exec:
 {{- define "probe.keycloak" -}}
 httpGet:
   port: 8080
-  path: /{{ .Values.auth.service.path }}/health
+  path: /health
 {{- end }}
 {{- define "probe.seaweedfs" -}}
 httpGet:
