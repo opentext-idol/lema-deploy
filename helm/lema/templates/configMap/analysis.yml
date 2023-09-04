@@ -16,9 +16,9 @@ data:
   ISOL_ENTITY_INDEXDB_INDEX_PORT: "{{ .Values.entity.index.service.indexPort }}"
   ISOL_FILE_STORE_URL: "{{ .Values.filestore.service.protocol }}://{{ .Values.filestore.service.name }}:{{ .Values.filestore.service.port }}{{ .Values.filestore.service.path }}"
   ISOL_FILE_STORE_BUCKET: "{{ .Values.filestore.bucket }}"
-  ISOL_ANALYSIS_FACE_DEC_THREADS: "2"
-  ISOL_ANALYSIS_VEHICLE_THREADS: "2"
-  ISOL_ANALYSIS_OBJECT_THREADS: "2"
+  ISOL_ANALYSIS_FACE_DEC_THREADS: "{{ .Values.analysis.concurrency.face }}"
+  ISOL_ANALYSIS_VEHICLE_THREADS: "{{ .Values.analysis.concurrency.vehicle }}"
+  ISOL_ANALYSIS_OBJECT_THREADS: "{{ .Values.analysis.concurrency.object }}"
 
 ---
 

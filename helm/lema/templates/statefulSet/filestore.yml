@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.filestore.name }}
 
 spec:
-  replicas: 1
+  replicas: {{ .Values.filestore.replicas }}
   selector:
     matchLabels:
       component: {{ .Values.filestore.name }}

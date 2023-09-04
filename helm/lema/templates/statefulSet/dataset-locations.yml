@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.datasets.locations.name }}
 
 spec:
-  replicas: 1
+  replicas: {{ .Values.datasets.locations.replicas }}
   selector:
     matchLabels:
       component: {{ .Values.datasets.locations.name }}

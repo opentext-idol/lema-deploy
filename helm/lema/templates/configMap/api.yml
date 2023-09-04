@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.api.config }}
 data:
-  SPRING_PROFILES_ACTIVE: "lema"
+  SPRING_PROFILES_ACTIVE: "{{ .Values.api.applicationType }}"
   ISOL_ENTITY_STORAGEDB_HOST: "{{ .Values.entity.storage.service.name }}"
   ISOL_ENTITY_STORAGEDB_PORT: "{{ .Values.entity.storage.service.port }}"
   ISOL_ENTITY_INDEXDB_HOST: "{{ .Values.entity.index.service.name }}"
@@ -38,18 +38,18 @@ data:
   ISOL_AUDIT_HOST: "{{ .Values.audit.service.name }}"
   ISOL_AUDIT_PORT: "{{ .Values.audit.service.port }}"
   ISOL_AUDIT_DATABASE_NAME: "{{ .Values.audit.database }}"
-  ISOL_API_SERVICE_APPLICATION_TYPE: "lema"
+  ISOL_API_SERVICE_APPLICATION_TYPE: "{{ .Values.api.applicationType }}"
   ISOL_API_SERVICE_ALLOWED_ORIGINS:  "{{ .Values.external.protocol }}://{{ .Values.external.host }}"
   ISOL_API_SERVICE_BASE_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}:{{ .Values.external.port }}{{ .Values.api.external.path }}"
 
-  ISOL_WATCHLIST_MIN_EVENT_AGE_SECONDS: "60"
-  ISOL_STATS_MIN_ANALYSIS_JOB_EVENT_AGE_SECONDS: "60"
+  ISOL_WATCHLIST_MIN_EVENT_AGE_SECONDS: "{{ .Values.api.watchlists.minEventAgeSeconds }}"
+  ISOL_STATS_MIN_ANALYSIS_JOB_EVENT_AGE_SECONDS: "{{ .Values.api.stats.minAnalysisJobAgeSeconds }}"
   ISOL_API_SERVICE_INTERNAL_PORT: "{{ .Values.api.internalPort }}"
-  ISOL_ENTITY_EXPIRY_POLE_LIFETIME_DAYS: "{{ .Values.api.expiry.poleLifetime }}"
-  ISOL_ENTITY_EXPIRY_CASE_LIFETIME_DAYS: "{{ .Values.api.expiry.caseLifetime }}"
+  ISOL_ENTITY_EXPIRY_POLE_LIFETIME_DAYS: "{{ .Values.api.expiry.poleLifetimeDays }}"
+  ISOL_ENTITY_EXPIRY_CASE_LIFETIME_DAYS: "{{ .Values.api.expiry.caseLifetimeDays }}"
   ISOL_ENTITY_MAX_MAX_RESULTS: "{{ .Values.api.maxResults.max }}"
   ISOL_ENTITY_DEFAULT_MAX_RESULTS: "{{ .Values.api.maxResults.default }}"
-  ISOL_ENTITY_DEFAULT_MAX_SUGGEST_RESULTS: "{{ .Values.api.maxResults.suggest }}"
+  ISOL_ENTITY_DEFAULT_MAX_SUGGEST_RESULTS: "{{ .Values.api.maxResults.suggestDefault }}"
 
 ---
 
@@ -63,3 +63,13 @@ data:
   ISOL_FILE_STORE_PASSWORD: "{{ .Values.filestore.password | b64enc }}"
   ISOL_AUDIT_USERNAME: "{{ .Values.audit.username | b64enc }}"
   ISOL_AUDIT_PASSWORD: "{{ .Values.audit.password | b64enc }}"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.api.filesConfig.configName }}
+data:
+  entitySchema: |-
+{{ .Files.Get "entity-schema.yaml" | indent 4 }}

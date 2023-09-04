@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.auth.name }}
 
 spec:
-  replicas: 1
+  replicas: {{ .Values.auth.replicas }}
   selector:
     matchLabels:
       component: {{ .Values.auth.name }}

@@ -2,7 +2,7 @@ licenseServer:
   service:
     name: license-service
     port: 20000
-  ip: localhost
+  ip: 127.0.0.1
   port: 20000
 
 external:
@@ -31,6 +31,7 @@ docker:
 auth:
   enabled: true
   name: auth
+  replicas: 1
   container: auth-container
   image: solutions-auth-service
   config: auth-config
@@ -41,10 +42,9 @@ auth:
   apiClient: lema_api
   apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87
   uiClient: lema_ui
-  tokenExpiryTime: 600
+  tokenExpiryTimeSeconds: 600
   external:
     path: /auth/
-
   service:
     name: auth-service
     port: 8080
@@ -60,65 +60,26 @@ auth:
     dataVolumeClaim: auth-db-data
     dataVolumeSize: 1Gi
 
-analysis:
-    enabled: true
-    name: analysis-nifi
-    container: analysis-nifi-container
-    image: solutions-analysis-service
-    config: analysis-nifi-config
-    secret: analysis-nifi-secret
-    replicas: 1
-    service:
-      name: analysis-service
-      port: 8090
-      jobsPort: 8091
-      path: /
-      jobsPath: /
-    ingress:
-      enabled: false
-      path: /nifi/
-
-filestore:
-  name: filestore
-  container: filestore-container
-  image: solutions-filestore-service
-  secret: filestore-config
-
-  replicas: 1
-  enabled: true
-  dataVolume: filestore-data
-  dataVolumeClaim: filestore-data
-  dataVolumeSize: 10Gi
-  username: lema-filestore
-  password: lema-filestore
-  bucket: lema-filestore
-  service:
-    protocol: http
-    name: filestore-service
-    port: 8333
-    path: /
-
-audit:
-  enabled: true
-  name: audit
-  container: audit-db
-  image: solutions-audit-db
-  config: audit-config
-  secret: audit-secret
-  dataVolume: audit-db-data
-  dataVolumeClaim: audit-db-data
-  dataVolumeSize: 1Gi
-  username: audit-user
-  password: audit-pass
-  database: auditDb
-  service:
-    name: audit-service
-    port: 5432
-
 entity:
+  storage:
+    enabled: true
+    name: entity-storage-db
+    replicas: 1
+    container: entity-storage-db-container
+    image: solutions-entity-storagedb
+    config: entity-storage-db-config
+    dataVolume: entity-storage-db-data
+    dataVolumeClaim: entity-storage-db-data
+    dataVolumeSize: 5Gi
+    maxHeapSize: 2G
+    heapNewSize: 500M
+    service:
+      name: entity-storage-db-service
+      port: 9042
   index:
     enabled: true
     name: entity-index-db
+    replicas: 1
     container: entity-index-db-container
     image: solutions-entity-indexdb
     config: entity-index-db-config
@@ -132,31 +93,74 @@ entity:
     ingress:
       enabled: false
       path: /content/
-  storage:
+
+filestore:
+  name: filestore
+  container: filestore-container
+  image: solutions-filestore-service
+  secret: filestore-config
+  replicas: 1
+  enabled: true
+  dataVolume: filestore-data
+  dataVolumeClaim: filestore-data
+  dataVolumeSize: 1Ti
+  username: lema-filestore
+  password: lema-filestore
+  bucket: lema-filestore
+  service:
+    protocol: http
+    name: filestore-service
+    port: 8333
+    path: /
+
+analysis:
+  enabled: true
+  name: analysis-nifi
+  container: analysis-nifi-container
+  image: solutions-analysis-service
+  config: analysis-nifi-config
+  secret: analysis-nifi-secret
+  replicas: 1
+  concurrency:
+    face: 4
+    vehicle: 4
+    object: 4
+  service:
+    name: analysis-service
+    port: 8090
+    jobsPort: 8091
+    path: /
+    jobsPath: /
+  ingress:
     enabled: true
-    name: entity-storage-db
-    container: entity-storage-db-container
-    image: solutions-entity-storagedb
-    config: entity-storage-db-config
-    dataVolume: entity-storage-db-data
-    dataVolumeClaim: entity-storage-db-data
-    dataVolumeSize: 5Gi
-    maxHeapSize:
-    heapNewSize:
-    service:
-      name: entity-storage-db-service
-      port: 9042
+    path: /nifi/
+
+audit:
+  enabled: true
+  name: audit
+  replicas: 1
+  container: audit-db
+  image: solutions-audit-db
+  config: audit-config
+  secret: audit-secret
+  dataVolume: audit-db-data
+  dataVolumeClaim: audit-db-data
+  dataVolumeSize: 1Gi
+  username: audit-user
+  password: audit-pass
+  database: audit-db
+  service:
+    name: audit-service
+    port: 5432
 
 datasets:
   locations:
     enabled: true
     name: dataset-locations-db
+    replicas: 2
     container: dataset-locations-db-container
     image: solutions-dataset-locations
     config: dataset-locations-db-config
-    dataVolume: dataset-locations-db-data
-    dataVolumeClaim: dataset-locations-db-data
-    dataVolumeSize: 2Gi
     service:
       name: dataset-locations-db-service
       queryPort: 9100
@@ -167,29 +171,40 @@ datasets:
 api:
   enabled: true
   name: api
+  replicas: 1
   container: api-container
   internalPort: 8080
   image: solutions-api-service
   config: api-config
   secret: api-secret
+  applicationType: lema
   external:
     path: /api/
   expiry:
-    poleLifetime: 365
-    caseLifetime: 365
+    poleLifetimeDays: 365
+    caseLifetimeDays: 365
   maxResults:
     max: 10000
     default: 500
-    suggest: 500
+    suggestDefault: 500
+  watchlists:
+    minEventAgeSeconds: 60
+  stats:
+    minAnalysisJobAgeSeconds: 60
   service:
     name: api-service
     port: 8080
   dataVolume: api-entity-data
   dataVolumeClaim: api-entity-data
   dataVolumeSize: 100M
+  filesConfig:
+    configName: api-config-files
+    volumeName: api-config-files
+
   dataEntity:
     container: data-entity
     image: solutions-lema-data-entity
+
   authSetup:
     container: auth-setup
     image: solutions-auth-setup

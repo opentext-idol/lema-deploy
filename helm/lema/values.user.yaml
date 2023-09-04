@@ -1,52 +1,131 @@
-# These values are required before deploying
+secret:
+  # Authentication to pull the IDOL container images from Docker Hub
+  base64dockerconfigjson:
 
-# External licenseserver host and port
+# External IDOL License Server that will provide licensing for the system
 licenseServer:
   ip:
   port: 20000
 
-# The external hostname of the server running Kubernetes
+# The address of the server running Kubernetes
 external:
-  host:
+  host: localhost
+  port: 80
 
-# Base64-encoded JSON config with docker-login credentials
-# Can create by running
-#   kubectl create secret docker-registry docker-secret --dry-run=client -o yaml --docker-username=microfocusidolreadonly --docker-password=<token>
-# and copying the .dockerconfigjson
-secret:
-  base64dockerconfigjson:
-
-# It is recommended to review the below passwords and maximum volume sizes before deploying
+# Keycloak authentication server
 auth:
+  # Whether to deploy the component
+  enabled: true
+  # Credentials to configure and use for managing the authentication server
   adminUser: lema-auth
   adminPassword: lema-auth
+  # Realm in the authentication server to configure and use
   realm: lema
+  # Client and client credentials to configure and use for API requests
   apiClient: lema_api
   apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87
+  # Client to configure and use for logging into the UI
   uiClient: lema_ui
+  # Expiry time in seconds for login tokens
+  tokenExpiryTimeSeconds: 600
+  external:
+    # Path on the Kubernetes server to make the Keycloak API and admin UI accessible from
+    path: /auth/
+  # PostgreSQL database server storing authentication server configuration
   db:
+    # Credentials to configure and use for access
     username: lema
     password: lema
+    # Name of the database
     database: lema-auth
+    # Maximum database size
     dataVolumeSize: 1Gi
 
+# Storage for application data
+entity:
+  # IDOL Content database backend
+  index:
+    # Whether to deploy the component
+    enabled: true
+    # Maximum database size
+    dataVolumeSize: 5Gi
+  # Cassandra database backend
+  storage:
+    # Whether to deploy the component
+    enabled: true
+    # Maximum database size
+    dataVolumeSize: 5Gi
+    # Memory tuning - refer to Cassandra documentation
+    maxHeapSize: 2G
+    heapNewSize: 500M
+
+# Amazon S3-compatible object storage for files
 filestore:
+  # Whether to deploy the component
   enabled: true
-  dataVolumeSize: 10Gi
+  # Maximum size for file storage
+  dataVolumeSize: 1Ti
+  # Credentials to configure and use for access
   username: lema-filestore
   password: lema-filestore
+  # Bucket to use for storing files
   bucket: lema-filestore
 
+# Media analysis system
+analysis:
+  # Whether to deploy the component
+  enabled: true
+  # Number of analysis processes to run in parallel for each analysis type
+  concurrency:
+    face: 4
+    vehicle: 4
+    object: 4
+
+# PostgreSQL database server storing audit logs
 audit:
+  # Whether to deploy the component
+  enabled: true
+  # Maximum database size
   dataVolumeSize: 1Gi
+  # Credentials to configure and use for access
   username: audit-user
   password: audit-pass
-  database: auditDb
+  # Name of the database
+  database: audit-db
 
-entity:
-  index:
-    dataVolumeSize: 5Gi
-  storage:
-    dataVolumeSize: 5Gi
-    maxHeapSize: 500M
-    heapNewSize: 100M
+datasets:
+  # Database of global locations
+  locations:
+    # Whether to deploy the component
+    enabled: true
+    # Target number of instances to keep running
+    replicas: 2
+
+# User-facing web server
+api:
+  # Whether to deploy the component
+  enabled: true
+  external:
+    # Path on the Kubernetes server to make the Keycloak API and admin UI accessible from
+    path: /api/
+  expiry:
+    # Default number of days until POLE entities are marked for expiry
+    poleLifetimeDays: 365
+    # Default number of days until case entities are marked for expiry
+    caseLifetimeDays: 365
+  maxResults:
+    # The maximum number of entity IDs that can be retrieved in a single entity traversal
+    max: 10000
+    # The default number of entity IDs retrieved in a single entity traversal
+    default: 500
+    # The default number of entity IDs retrieved in a single suggest traversal
+    suggest: 500
+
+# LEMA user interface
+lemaUi:
+  # Whether to deploy the component
+  enabled: true
+  # Target number of instances to keep running
+  replicas: 2
+  external:
+    path: /lema/

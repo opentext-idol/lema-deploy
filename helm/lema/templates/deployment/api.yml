@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.api.name }}
 
 spec:
-  replicas: 1
+  replicas: {{ .Values.api.replicas }}
   selector:
     matchLabels:
       component:  {{ .Values.api.name }}
@@ -15,6 +15,7 @@ spec:
         component: {{ .Values.api.name }}
     spec:
       initContainers:
+
         - name: {{ .Values.api.dataEntity.container }}
 {{ include "image" (dict
   "Values" .Values
@@ -25,6 +26,7 @@ spec:
           volumeMounts:
             - name: {{ .Values.api.dataVolume }}
               mountPath: /target-volume
+
         - name: {{ .Values.api.authSetup.container }}
 {{ include "image" (dict
   "Values" .Values
@@ -37,6 +39,7 @@ spec:
                 name: {{ .Values.api.authSetup.secret }}
             - configMapRef:
                 name: {{ .Values.api.authSetup.config }}
+
       containers:
         - name: api-service-container
 {{ include "image" (dict
@@ -55,6 +58,9 @@ spec:
           volumeMounts:
             - name: {{ .Values.api.dataVolume }}
               mountPath: /data/entity
+            - name: {{ .Values.api.filesConfig.volumeName }}
+              mountPath: /data/entity/02-custom.yaml
+              subPath: entitySchema
               readOnly: true
           startupProbe:
 {{ include "probe.api" . | indent 12 }}
@@ -73,6 +79,9 @@ spec:
         - name: {{ .Values.api.dataVolume }}
           persistentVolumeClaim:
             claimName: {{ .Values.api.dataVolumeClaim }}
+        - name: {{ .Values.api.filesConfig.volumeName }}
+          configMap:
+            name: {{ .Values.api.filesConfig.configName }}
       imagePullSecrets:
         - name: {{ .Values.secret.name }}
 ---

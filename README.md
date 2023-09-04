@@ -1,6 +1,6 @@
 # Law Enforcement Media Application (LEMA)
 
-The following installation steps compliment the full LEMA Administration Guide, available from the [IDOL documentation site](https://www.microfocus.com/documentation/idol/), under "IDOL Government Solutions".
+The following installation steps complement the full LEMA Administration Guide, available from the [IDOL documentation site](https://www.microfocus.com/documentation/idol/), under "IDOL Government Solutions".
 
 ## Basic deployment
 
