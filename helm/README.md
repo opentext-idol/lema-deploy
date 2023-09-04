@@ -61,11 +61,10 @@ Install the application with your updated configuration using Helm:
 helm install --values lema/values.user.yaml lema ./lema/
 ```
 
-With the default configuration, the LEMA UI will be available at `http://your-kubernetes-server/lema/` once the system
-has started.
-
-After the system has started, log in with a user that has the `admin` role. The LEMA UI will then perform a one-off
-initialization.
+After the system has started:
+* Add a user with the `admin` role (refer to the LEMA Administration Guide for details).
+* With the default configuration, access the LEMA UI at `http://your-kubernetes-server/lema/`.
+* Log in with the user you created. The LEMA UI will then perform a one-off initialization.
 
 ## Entities database schema
 
