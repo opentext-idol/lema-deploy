@@ -27,7 +27,7 @@ Run the `deploy.py` tool using Python.  (Much like when running `docker`, you
 may have to run it as a different user with sufficient permissions to manage Docker containers.)
 
 ```
-python3 deploy.py --init auth entity filestore analysis audit dataset-locations api ui
+python3 deploy.py --init auth entity filestore analysis audit api ui
 ```
 
 With the default configuration, the LEMA UI will be available at `https://localhost:8070` once the
@@ -71,7 +71,7 @@ customized once, before deploying the system.  Customizations are saved permanen
 To use HTTP instead of HTTPS, for testing purposes only, run:
 
 ```
-python3 deploy.py --disable-encryption --init auth entity filestore analysis audit dataset-locations api ui
+python3 deploy.py --disable-encryption --init auth entity filestore analysis audit api ui
 ```
 
 > note: changes to the encryption state of a deployed system require manual deletion of the realm in Keycloak before running `deploy.py` with the new state.
@@ -80,7 +80,7 @@ To resume a stopped LEMA system, or to apply changes made to configuration files
 components are deployed: run the normal command to deploy, but without the `--init` argument:
 
 ```
-python3 deploy.py auth entity filestore analysis audit dataset-locations api ui
+python3 deploy.py auth entity filestore analysis audit api ui
 ```
 
 To stop and remove deployed LEMA services, run the Python `deploy.py` tool with no arguments:
