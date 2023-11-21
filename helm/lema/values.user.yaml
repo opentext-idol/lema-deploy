@@ -49,7 +49,7 @@ entity:
     enabled: true
     # Maximum database size
     dataVolumeSize: 5Gi
-  # Cassandra database backend
+  # Cassandra-compatible database backend
   storage:
     # Whether to deploy the component
     enabled: true
