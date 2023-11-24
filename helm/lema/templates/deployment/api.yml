@@ -14,34 +14,8 @@ spec:
       labels:
         component: {{ .Values.api.name }}
     spec:
-      initContainers:
-
-        - name: {{ .Values.api.dataEntity.container }}
-{{ include "image" (dict
-  "Values" .Values
-  "imageName" .Values.api.dataEntity.image
-  "version" .Values.docker.versions.lemaData
-  ) | indent 10 }}
-          imagePullPolicy: {{ .Values.docker.pullPolicy }}
-          volumeMounts:
-            - name: {{ .Values.api.dataVolume }}
-              mountPath: /target-volume
-
-        - name: {{ .Values.api.authSetup.container }}
-{{ include "image" (dict
-  "Values" .Values
-  "imageName" .Values.api.authSetup.image
-  "version" .Values.docker.versions.api
-  ) | indent 10 }}
-          imagePullPolicy: {{ .Values.docker.pullPolicy }}
-          envFrom:
-            - secretRef:
-                name: {{ .Values.api.authSetup.secret }}
-            - configMapRef:
-                name: {{ .Values.api.authSetup.config }}
-
       containers:
-        - name: api-service-container
+        - name: {{ .Values.api.container }}
 {{ include "image" (dict
   "Values" .Values
   "imageName" .Values.api.image

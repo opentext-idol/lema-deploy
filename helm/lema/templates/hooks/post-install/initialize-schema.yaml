@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Values.initTool.name }}"
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.initTool.name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: "{{ .Values.initTool.container }}"
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.initTool.image
+  "version" .Values.docker.versions.api
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.initTool.config }}
+          volumeMounts:
+            - name: {{ .Values.api.dataVolume }}
+              mountPath: /data/entity
+            - name: {{ .Values.api.filesConfig.volumeName }}
+              mountPath: /data/entity/02-custom.yaml
+              subPath: entitySchema
+              readOnly: true
+      volumes:
+        - name: {{ .Values.api.dataVolume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.api.dataVolumeClaim }}
+        - name: {{ .Values.api.filesConfig.volumeName }}
+          configMap:
+            name: {{ .Values.api.filesConfig.configName }}
+
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}
