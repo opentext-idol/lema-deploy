@@ -61,6 +61,7 @@ auth:
     dataVolumeSize: 1Gi
 
 entity:
+  graphName: entities
   storage:
     enabled: true
     name: entity-storage-db
@@ -201,15 +202,17 @@ api:
     configName: api-config-files
     volumeName: api-config-files
 
-  dataEntity:
-    container: data-entity
-    image: solutions-lema-data-entity
+dataEntity:
+  name: data-entity
+  container: data-entity
+  image: solutions-lema-data-entity
 
-  authSetup:
-    container: auth-setup
-    image: solutions-auth-setup
-    config: auth-setup-config
-    secret: auth-setup-secret
+authSetup:
+  name: auth-setup
+  container: auth-setup
+  image: solutions-auth-setup
+  config: auth-setup-config
+  secret: auth-setup-secret
 
 lemaUi:
   enabled: true
@@ -223,3 +226,9 @@ lemaUi:
     port: 80
   external:
     path: /lema/
+
+initTool:
+  name: init-tool
+  container: init-tool-container
+  image: solutions-init-tool
+  config: init-tool-config

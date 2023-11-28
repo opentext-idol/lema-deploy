@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.initTool.config }}
+data:
+
+  ISOL_ENTITY_STORAGEDB_HOST: "{{ .Values.entity.storage.service.name }}"
+  ISOL_ENTITY_STORAGEDB_PORT: "{{ .Values.entity.storage.service.port }}"
+  ISOL_ENTITY_INDEXDB_HOST: "{{ .Values.entity.index.service.name }}"
+  ISOL_ENTITY_INDEXDB_ACI_PORT: "{{ .Values.entity.index.service.queryPort }}"
+  ISOL_ENTITY_INDEXDB_INDEX_PORT: "{{ .Values.entity.index.service.indexPort }}"
+  ISOL_ENTITY_DATA_VOLUME_PATH: "/data/entity"
+  ISOL_ENTITY_GRAPH_NAME: "{{ .Values.entity.graphName }}"
