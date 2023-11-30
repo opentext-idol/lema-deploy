@@ -22,13 +22,13 @@ spec:
   ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           volumeMounts:
-            - name: {{ .Values.api.dataVolume }}
+            - name: {{ .Values.initTool.entityData.volume }}
               mountPath: /target-volume
 
       volumes:
-        - name: {{ .Values.api.dataVolume }}
+        - name: {{ .Values.initTool.entityData.volume }}
           persistentVolumeClaim:
-            claimName: {{ .Values.api.dataVolumeClaim }}
+            claimName: {{ .Values.initTool.entityData.volumeClaim }}
 
       imagePullSecrets:
         - name: {{ .Values.secret.name }}
