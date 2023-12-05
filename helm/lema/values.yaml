@@ -195,7 +195,6 @@ api:
   service:
     name: api-service
     port: 8080
-    volumeName: api-config-files
 
 dataEntity:
   name: data-entity
