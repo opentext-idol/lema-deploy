@@ -25,19 +25,12 @@ spec:
             - configMapRef:
                 name: {{ .Values.initTool.config }}
           volumeMounts:
-            - name: {{ .Values.api.dataVolume }}
+            - name: {{ .Values.initTool.entityData.volume }}
               mountPath: /data/entity
-            - name: {{ .Values.api.filesConfig.volumeName }}
-              mountPath: /data/entity/02-custom.yaml
-              subPath: entitySchema
-              readOnly: true
       volumes:
-        - name: {{ .Values.api.dataVolume }}
+        - name: {{ .Values.initTool.entityData.volume }}
           persistentVolumeClaim:
-            claimName: {{ .Values.api.dataVolumeClaim }}
-        - name: {{ .Values.api.filesConfig.volumeName }}
-          configMap:
-            name: {{ .Values.api.filesConfig.configName }}
+            claimName: {{ .Values.initTool.entityData.volumeClaim }}
 
       imagePullSecrets:
         - name: {{ .Values.secret.name }}

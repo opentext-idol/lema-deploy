@@ -30,6 +30,9 @@ spec:
                 name: {{ .Values.analysis.secret }}
             - configMapRef:
                 name: {{ .Values.analysis.config }}
+          volumeMounts:
+            - name: {{ .Values.initTool.entityData.volume }}
+              mountPath: /data/entity
           startupProbe:
 {{ include "probe.nifi" . | indent 12 }}
             initialDelaySeconds: 30
@@ -42,6 +45,10 @@ spec:
 {{ include "probe.nifi" . | indent 12 }}
             periodSeconds: 60
             failureThreshold: 20
+      volumes:
+        - name: {{ .Values.initTool.entityData.volume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.initTool.entityData.volumeClaim }}
       imagePullSecrets:
         - name: {{ .Values.secret.name }}
 ---

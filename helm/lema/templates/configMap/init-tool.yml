@@ -11,3 +11,13 @@ data:
   ISOL_ENTITY_INDEXDB_INDEX_PORT: "{{ .Values.entity.index.service.indexPort }}"
   ISOL_ENTITY_DATA_VOLUME_PATH: "/data/entity"
   ISOL_ENTITY_GRAPH_NAME: "{{ .Values.entity.graphName }}"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.initTool.filesConfig.configName }}
+data:
+  entitySchema: |-
+{{ .Files.Get "entity-schema.yaml" | indent 4 }}

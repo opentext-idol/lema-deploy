@@ -195,12 +195,6 @@ api:
   service:
     name: api-service
     port: 8080
-  dataVolume: api-entity-data
-  dataVolumeClaim: api-entity-data
-  dataVolumeSize: 100M
-  filesConfig:
-    configName: api-config-files
-    volumeName: api-config-files
 
 dataEntity:
   name: data-entity
@@ -232,3 +226,10 @@ initTool:
   container: init-tool-container
   image: solutions-init-tool
   config: init-tool-config
+  entityData:
+    volume: init-entity-data
+    volumeClaim: init-entity-data
+    volumeSize: 100M
+  filesConfig:
+    configName: init-config-files
+    volumeName: init-config-files
