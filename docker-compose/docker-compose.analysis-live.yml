@@ -34,12 +34,14 @@ services:
       - main
     volumes:
       - analysis-live-mediaserver-output:/mediaserver-output
+      - entity-data:/data/entity
     environment:
       - ISOL_ENTITY_STORAGEDB_HOST=${ISOL_ENTITY_STORAGEDB_HOST}
       - ISOL_ENTITY_STORAGEDB_PORT=${ISOL_ENTITY_STORAGEDB_PORT}
       - ISOL_ENTITY_INDEXDB_HOST=${ISOL_ENTITY_INDEXDB_HOST}
       - ISOL_ENTITY_INDEXDB_ACI_PORT=${ISOL_ENTITY_INDEXDB_ACI_PORT}
       - ISOL_ENTITY_INDEXDB_INDEX_PORT=${ISOL_ENTITY_INDEXDB_INDEX_PORT}
+      - ISOL_ENTITY_DATA_VOLUME_PATH=/data/entity
       - ISOL_AUDIT_HOST=${ISOL_AUDIT_DB_HOST}
       - ISOL_AUDIT_PORT=${ISOL_AUDIT_DB_PORT}
       - ISOL_AUDIT_USERNAME=${ISOL_AUDIT_DB_USERNAME}
@@ -51,3 +53,4 @@ services:
 volumes:
   analysis-live-mediaserver-license-data:
   analysis-live-mediaserver-output:
+  entity-data:

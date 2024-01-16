@@ -1,0 +1,33 @@
+#
+# Copyright 2021-2023 Open Text.
+#
+# Licensed under the MIT License (the "License"); you may not use this file
+# except in compliance with the License.
+#
+# The only warranties for products and services of Open Text and its affiliates
+# and licensors ("Open Text") are as may be set forth in the express warranty
+# statements accompanying such products and services. Nothing herein should be
+# construed as constituting an additional warranty. Open Text shall not be
+# liable for technical or editorial errors or omissions contained herein. The
+# information contained herein is subject to change without notice.
+#
+
+services:
+
+  init-tool:
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-init-tool${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
+    networks:
+      - main
+    volumes:
+      - entity-data:/data/entity
+    environment:
+      - ISOL_ENTITY_STORAGEDB_HOST=${ISOL_ENTITY_STORAGEDB_HOST}
+      - ISOL_ENTITY_STORAGEDB_PORT=${ISOL_ENTITY_STORAGEDB_PORT}
+      - ISOL_ENTITY_INDEXDB_HOST=${ISOL_ENTITY_INDEXDB_HOST}
+      - ISOL_ENTITY_INDEXDB_ACI_PORT=${ISOL_ENTITY_INDEXDB_ACI_PORT}
+      - ISOL_ENTITY_INDEXDB_INDEX_PORT=${ISOL_ENTITY_INDEXDB_INDEX_PORT}
+      - ISOL_ENTITY_DATA_VOLUME_PATH=/data/entity
+      - ISOL_ENTITY_GRAPH_NAME=entities
+
+volumes:
+  entity-data:

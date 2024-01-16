@@ -63,13 +63,3 @@ data:
   ISOL_FILE_STORE_PASSWORD: "{{ .Values.filestore.password | b64enc }}"
   ISOL_AUDIT_USERNAME: "{{ .Values.audit.username | b64enc }}"
   ISOL_AUDIT_PASSWORD: "{{ .Values.audit.password | b64enc }}"
-
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.api.filesConfig.configName }}
-data:
-  entitySchema: |-
-{{ .Files.Get "entity-schema.yaml" | indent 4 }}

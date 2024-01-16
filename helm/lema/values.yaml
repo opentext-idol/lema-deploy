@@ -20,13 +20,13 @@ docker:
   versionSeparator: ":"
   pullPolicy: IfNotPresent
   versions:
-    base: 23.4.0
-    api: 23.4.0
-    datasets: 23.4.0
-    analysis: 23.4.0
-    lemaData: 23.4.0
-    lema: 23.4.0
-    postgres: 15.4
+    base: 24.1.0
+    api: 24.1.0
+    datasets: 24.1.0
+    analysis: 24.1.0
+    lemaData: 24.1.0
+    lema: 24.1.0
+    postgres: 16.1
 
 auth:
   enabled: true
@@ -61,6 +61,7 @@ auth:
     dataVolumeSize: 1Gi
 
 entity:
+  graphName: entities
   storage:
     enabled: true
     name: entity-storage-db
@@ -194,22 +195,18 @@ api:
   service:
     name: api-service
     port: 8080
-  dataVolume: api-entity-data
-  dataVolumeClaim: api-entity-data
-  dataVolumeSize: 100M
-  filesConfig:
-    configName: api-config-files
-    volumeName: api-config-files
 
-  dataEntity:
-    container: data-entity
-    image: solutions-lema-data-entity
+dataEntity:
+  name: data-entity
+  container: data-entity
+  image: solutions-lema-data-entity
 
-  authSetup:
-    container: auth-setup
-    image: solutions-auth-setup
-    config: auth-setup-config
-    secret: auth-setup-secret
+authSetup:
+  name: auth-setup
+  container: auth-setup
+  image: solutions-auth-setup
+  config: auth-setup-config
+  secret: auth-setup-secret
 
 lemaUi:
   enabled: true
@@ -223,3 +220,16 @@ lemaUi:
     port: 80
   external:
     path: /lema/
+
+initTool:
+  name: init-tool
+  container: init-tool-container
+  image: solutions-init-tool
+  config: init-tool-config
+  entityData:
+    volume: init-entity-data
+    volumeClaim: init-entity-data
+    volumeSize: 100M
+  filesConfig:
+    configName: init-config-files
+    volumeName: init-config-files

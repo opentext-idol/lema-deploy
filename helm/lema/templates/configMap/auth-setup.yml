@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.api.authSetup.config }}
+  name: {{ .Values.authSetup.config }}
 data:
   ISOL_AUTH_SERVICE_PROTOCOL: "{{ .Values.auth.service.protocol }}"
   ISOL_AUTH_SERVICE_HOST: "{{ .Values.auth.service.name }}"
@@ -19,7 +19,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ .Values.api.authSetup.secret }}
+  name: {{ .Values.authSetup.secret }}
 data:
   ISOL_AUTH_SERVICE_ADMIN_USER: "{{ .Values.auth.adminUser | b64enc }}"
   ISOL_AUTH_SERVICE_ADMIN_PASS: "{{ .Values.auth.adminPassword | b64enc }}"

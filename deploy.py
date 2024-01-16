@@ -195,7 +195,7 @@ def main():
 
     if program_args.component:
         validate_components(program_args.component, component_paths)
-        deploy(program_args.component + ['data-entity'], component_paths, program_args)
+        deploy(program_args.component + ['data-entity', 'init'], component_paths, program_args)
         if program_args.init:
             initialise(component_paths, program_args)
 
