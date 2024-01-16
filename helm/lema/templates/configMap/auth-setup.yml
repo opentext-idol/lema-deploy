@@ -13,6 +13,7 @@ data:
   ISOL_AUTH_SERVICE_UI_CLIENT: "{{ .Values.auth.uiClient }}"
   ISOL_AUTH_SERVICE_UI_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}{{ .Values.lemaUi.external.path }}*"
   ISOL_AUTH_SERVICE_TOKEN_EXPIRY_TIME: "{{ .Values.auth.tokenExpiryTimeSeconds }}"
+  ISOL_AUTH_SERVICE_BASE_REALM_ROLES: "{{ .Values.auth.baseRealmRoles }}"
 
 ---
 
