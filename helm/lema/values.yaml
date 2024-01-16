@@ -20,13 +20,13 @@ docker:
   versionSeparator: ":"
   pullPolicy: IfNotPresent
   versions:
-    base: 23.4.0
-    api: 23.4.0
-    datasets: 23.4.0
-    analysis: 23.4.0
-    lemaData: 23.4.0
-    lema: 23.4.0
-    postgres: 15.4
+    base: 24.1.0
+    api: 24.1.0
+    datasets: 24.1.0
+    analysis: 24.1.0
+    lemaData: 24.1.0
+    lema: 24.1.0
+    postgres: 16.1
 
 auth:
   enabled: true
