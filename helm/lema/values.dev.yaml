@@ -24,9 +24,11 @@ filestore:
   dataVolumeSize: 10Gi
 analysis:
   concurrency:
-    face: 2
-    vehicle: 2
-    object: 2
+    threads:
+      face: 2
+      vehicle: 2
+      object: 2
+
 datasets:
   locations:
     replicas: 1
