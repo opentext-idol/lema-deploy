@@ -45,7 +45,9 @@ auth:
   tokenExpiryTimeSeconds: 600
   baseRealmRoles: analyst,requestor,supervisor
   external:
+    # must end with /
     path: /auth/
+    adminPort: 30020
   service:
     name: auth-service
     port: 8080

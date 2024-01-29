@@ -73,15 +73,21 @@ customized once, before deploying the system.  Customizations are saved permanen
 
 ## System information
 
-By default, the following HTTP paths serve requests on port 80:
+By default, the following HTTP paths serve requests on port 80 and 443 (HTTPS):
 
-| **Path** | **Purpose**                                       |
-|----------|---------------------------------------------------|
-| /auth/   | Keycloak authentication server (API and admin UI) |
-| /api/    | System HTTP API                                   |
-| /lema/   | LEMA UI                                           |
+| **Path** | **Purpose**                    |
+|----------|--------------------------------|
+| /auth/   | Keycloak authentication server |
+| /api/    | System HTTP API                |
+| /lema/   | LEMA UI                        |
 
-The following persisent volumes claims are created:
+In addition, by default, the following ports are used for admin access:
+
+| **Port** | **Purpose**                                         |
+|----------|-----------------------------------------------------|
+| 30020    | Keycloak authentication server Admin Console (HTTP) |
+
+The following persistent volume claims are created:
 
 | **Name**               | **Default size** | **Purpose**                         |
 |------------------------|------------------|-------------------------------------|

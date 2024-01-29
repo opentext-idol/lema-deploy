@@ -86,4 +86,4 @@ spec:
     - name: http
       port: {{ .Values.auth.service.port }}
       targetPort: 8080
-      nodePort: 30020
+      nodePort: {{ .Values.auth.external.adminPort }}
