@@ -9,12 +9,12 @@ docker:
   nameSeparator: ":"
   versionSeparator: "-"
   versions:
-    base: 24.2.0-SNAPSHOT
-    api: 24.2.0-SNAPSHOT
-    datasets: 24.2.0-SNAPSHOT
-    analysis: 24.2.0-SNAPSHOT
-    lemaData: 24.2.0-SNAPSHOT
-    lema: 24.2.0-SNAPSHOT
+    base: 24.3.0-SNAPSHOT
+    api: 24.3.0-SNAPSHOT
+    datasets: 24.3.0-SNAPSHOT
+    analysis: 24.3.0-SNAPSHOT
+    lemaData: 24.3.0-SNAPSHOT
+    lema: 24.3.0-SNAPSHOT
 
 entity:
   storage:
