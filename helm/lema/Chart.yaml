@@ -3,4 +3,4 @@ name: lema
 description: A Basic IDOL LEMA deployment
 type: application
 version: 0.1.0
-appVersion: "24.2.1"
+appVersion: "24.2.2"

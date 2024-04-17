@@ -25,7 +25,7 @@ docker:
     datasets: 24.2.0
     analysis: 24.2.0
     lemaData: 24.2.0
-    lema: 24.2.1
+    lema: 24.2.2
     postgres: 16.1
 
 auth:
