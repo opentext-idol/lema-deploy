@@ -1,0 +1,24 @@
+# https://www.keycloak.org/server/reverseproxy#_exposed_path_recommendations
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: isol-ingress-auth-realms
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /realms/$1
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Forwarded-Host $host;
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: {{ .Values.auth.external.path }}realms/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.auth.service.name }}
+                port:
+                  number: {{ .Values.auth.service.port }}

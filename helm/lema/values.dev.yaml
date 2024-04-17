@@ -9,12 +9,12 @@ docker:
   nameSeparator: ":"
   versionSeparator: "-"
   versions:
-    base: 24.2.0-SNAPSHOT
-    api: 24.2.0-SNAPSHOT
-    datasets: 24.2.0-SNAPSHOT
-    analysis: 24.2.0-SNAPSHOT
-    lemaData: 24.2.0-SNAPSHOT
-    lema: 24.2.0-SNAPSHOT
+    base: 24.3.0-SNAPSHOT
+    api: 24.3.0-SNAPSHOT
+    datasets: 24.3.0-SNAPSHOT
+    analysis: 24.3.0-SNAPSHOT
+    lemaData: 24.3.0-SNAPSHOT
+    lema: 24.3.0-SNAPSHOT
 
 entity:
   storage:
@@ -24,9 +24,11 @@ filestore:
   dataVolumeSize: 10Gi
 analysis:
   concurrency:
-    face: 2
-    vehicle: 2
-    object: 2
+    threads:
+      face: 2
+      vehicle: 2
+      object: 2
+
 datasets:
   locations:
     replicas: 1

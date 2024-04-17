@@ -20,12 +20,12 @@ docker:
   versionSeparator: ":"
   pullPolicy: IfNotPresent
   versions:
-    base: 24.1.0
-    api: 24.1.0
-    datasets: 24.1.0
-    analysis: 24.1.0
-    lemaData: 24.1.0
-    lema: 24.1.0
+    base: 24.2.0
+    api: 24.2.0
+    datasets: 24.2.0
+    analysis: 24.2.0
+    lemaData: 24.2.0
+    lema: 24.2.2
     postgres: 16.1
 
 auth:
@@ -43,8 +43,11 @@ auth:
   apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87
   uiClient: lema_ui
   tokenExpiryTimeSeconds: 600
+  baseRealmRoles: analyst,requestor,supervisor
   external:
+    # must end with /
     path: /auth/
+    adminPort: 30020
   service:
     name: auth-service
     port: 8080
@@ -123,9 +126,40 @@ analysis:
   secret: analysis-nifi-secret
   replicas: 1
   concurrency:
-    face: 4
-    vehicle: 4
-    object: 4
+    max: 10
+    threads:
+      face: 4
+      vehicle: 4
+      object: 4
+    taskCount:
+      # Configure the number of tasks that can be concurrently scheduled by each NiFi processor
+      createPreview: 4
+      extractMetadata: 4
+      faceDetection: 4
+      faceRecognition: 4
+      faceTraining: 4
+      fetchS3Object: 4
+      imageExtract: 4
+      keyViewExportToHTML: 4
+      objectClassRecognition: 4
+      putIsol: 4
+      removeDocumentPart: 4
+      transcodeVideo: 4
+      vehicleAnalysis: 4
+      videoClip: 4
+      # The following tasks are internal and should normally be left at the default of 1
+      analysisRouteOnAttribute: 1
+      createPreviewRouteOnAttribute: 1
+      extractJobAttributes: 1
+      extractJobOptions: 1
+      failIsol: 1
+      getLicense: 1
+      handleHTTPRequest: 1
+      handleHTTPResponseFailure: 1
+      handleHTTPResponseSuccess: 1
+      htmlFromDocumentRouteOnAttribute: 1
+      setContent: 1
+
   service:
     name: analysis-service
     port: 8090
