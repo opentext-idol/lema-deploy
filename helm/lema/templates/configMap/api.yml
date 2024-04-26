@@ -50,6 +50,7 @@ data:
   ISOL_ENTITY_MAX_MAX_RESULTS: "{{ .Values.api.maxResults.max }}"
   ISOL_ENTITY_DEFAULT_MAX_RESULTS: "{{ .Values.api.maxResults.default }}"
   ISOL_ENTITY_DEFAULT_MAX_SUGGEST_RESULTS: "{{ .Values.api.maxResults.suggestDefault }}"
+  ISOL_ENTITY_IDOL_SECURITY_MODE: "{{ .Values.api.idolSecurity.mode }}"
 
 ---
 

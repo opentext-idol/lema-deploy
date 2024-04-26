@@ -222,6 +222,10 @@ api:
     max: 10000
     default: 500
     suggestDefault: 500
+  idolSecurity:
+    mode: denyAll
+    aclFormat: "<E=B!>:U:<U=SLE+>:G:<G=SLE+>:NU:<NU=SLE->:NG:<NG=SLE->"
+    aclCheck: "NU=[DU]?F:-,NG=[DG]?F:-,E=1?P:-,U=[DU]?P:-,G=[DG]?P:F"
   watchlists:
     minEventAgeSeconds: 60
   stats:
