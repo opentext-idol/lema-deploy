@@ -140,7 +140,7 @@ api:
     # The default number of entity IDs retrieved in a single entity traversal
     default: 500
     # The default number of entity IDs retrieved in a single suggest traversal
-    suggest: 500
+    suggestDefault: 500
 
 # LEMA user interface
 lemaUi:
