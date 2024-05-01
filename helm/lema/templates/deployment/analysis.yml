@@ -37,7 +37,7 @@ spec:
 {{ include "probe.nifi" . | indent 12 }}
             initialDelaySeconds: 30
             periodSeconds: 10
-            failureThreshold: 6
+            failureThreshold: 30
           readinessProbe:
 {{ include "probe.nifi" . | indent 12 }}
             failureThreshold: 2

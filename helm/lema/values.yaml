@@ -239,13 +239,6 @@ dataEntity:
   container: data-entity
   image: solutions-lema-data-entity
 
-authSetup:
-  name: auth-setup
-  container: auth-setup
-  image: solutions-auth-setup
-  config: auth-setup-config
-  secret: auth-setup-secret
-
 lemaUi:
   enabled: true
   name: lema-ui
@@ -264,6 +257,7 @@ initTool:
   container: init-tool-container
   image: solutions-init-tool
   config: init-tool-config
+  secret: init-tool-secret
   entityData:
     volume: init-entity-data
     volumeClaim: init-entity-data
