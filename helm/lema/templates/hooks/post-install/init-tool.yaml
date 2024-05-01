@@ -22,6 +22,8 @@ spec:
   ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           envFrom:
+            - secretRef:
+                name: {{ .Values.initTool.secret }}
             - configMapRef:
                 name: {{ .Values.initTool.config }}
           volumeMounts:

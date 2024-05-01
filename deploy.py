@@ -75,8 +75,7 @@ def parse_args():
     p.add_argument('component', nargs='*', metavar='COMPONENT', help='components to deploy')
     p.add_argument('--docker-host', metavar='HOST',
                    help='Docker host to run containers on (default: use Docker running locally)')
-    p.add_argument('--init', action='store_const', const=True, default=False,
-                   help='after the system is running, perform one-time initialisation tasks')
+    p.add_argument('--init', action='store_const', const=True, default=False, help='deprecated option')
     p.add_argument('--disable-encryption', action='store_const', const=True, default=False,
                    help='configure user-facing servers to accept HTTP connections (by default, '
                         'user-facing servers accept HTTPS connections)')
@@ -180,30 +179,21 @@ def deploy(components, component_paths, options):
     run_compose(components, component_paths, options, options.skip_pull, remove=True)
 
 
-def initialise(component_paths, options):
-    components = ['auth-setup']
-    if options.disable_encryption:
-        # should be last
-        components.append('unencrypted')
-
-    run_compose(components, component_paths, options, options.skip_pull, detach=False, log_level='error')
-
-
 def main():
     program_args = parse_args()
     component_paths = get_component_paths(program_args)
 
     if program_args.component:
-        validate_components(program_args.component, component_paths)
-        deploy(program_args.component + ['data-entity', 'init'], component_paths, program_args)
-        if program_args.init:
-            initialise(component_paths, program_args)
+        components = program_args.component + ['data-entity']
+        if 'auth' in components or 'api' in components:
+            components.append('init')
+        validate_components(components, component_paths)
+        deploy(components, component_paths, program_args)
 
     # If no components were listed to be started, perform docker compose down
     else:
         run_process(get_compose_args(component_paths.keys(), component_paths, program_args,
                                      ['down'], remove=True, log_level='error'))
-
 
 
 try:

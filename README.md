@@ -27,7 +27,7 @@ Run the `deploy.py` tool using Python.  (Much like when running `docker`, you
 may have to run it as a different user with sufficient permissions to manage Docker containers.)
 
 ```
-python3 deploy.py --init auth entity filestore analysis audit api ui
+python3 deploy.py auth entity filestore analysis audit api ui
 ```
 
 With the default configuration, the LEMA UI will be available at `https://localhost:8070` once the
@@ -71,17 +71,13 @@ customized once, before deploying the system.  Customizations are saved permanen
 To use HTTP instead of HTTPS, for testing purposes only, run:
 
 ```
-python3 deploy.py --disable-encryption --init auth entity filestore analysis audit api ui
+python3 deploy.py --disable-encryption auth entity filestore analysis audit api ui
 ```
 
 > note: changes to the encryption state of a deployed system require manual deletion of the realm in Keycloak before running `deploy.py` with the new state.
 
 To resume a stopped LEMA system, or to apply changes made to configuration files, or to change which
-components are deployed: run the normal command to deploy, but without the `--init` argument:
-
-```
-python3 deploy.py auth entity filestore analysis audit api ui
-```
+components are deployed: run the normal command to deploy.
 
 To stop and remove deployed LEMA services, run the Python `deploy.py` tool with no arguments:
 
@@ -92,12 +88,11 @@ python3 deploy.py
 You can deploy components on different hosts, or deploy some components separately using a
 compatible implementation (read the `deploy.py` tool help text for a list of components).  For
 example, to use an existing object storage server and deploy the audit database on a separate host,
-configure hosts and ports in the files in `config/`, and then run on separate hosts (note that
-`--init` need only be run once):
+configure hosts and ports in the files in `config/`, and then run on separate hosts:
 
 ```
 python3 deploy.py audit
-python3 deploy.py --init auth entity analysis api ui
+python3 deploy.py auth entity analysis api ui
 ```
 
 ## System information
