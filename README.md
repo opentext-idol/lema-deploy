@@ -33,7 +33,8 @@ python3 deploy.py auth entity filestore analysis audit api ui
 With the default configuration, the LEMA UI will be available at `https://localhost:8070` once the
 system has started.
 
-After the system has started, log in with a user that has the `admin` role. The LEMA UI will then perform a one off initialization. 
+After the system has started, log in with the admin user (see `ISOL_INIT_AUTH_ADMIN_USERNAME` in `config/base.env`). The
+LEMA UI will then perform a one off initialization. 
 
 To show options and other usage information, run:
 

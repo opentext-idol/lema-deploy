@@ -21,6 +21,9 @@ auth:
   adminPassword: lema-auth
   # Realm in the authentication server to configure and use
   realm: lema
+  # Frontend administrator user to create as part of system initialization
+  createAdminUsername: admin
+  createAdminPassword: admin
   # Client and client credentials to configure and use for API requests
   apiClient: lema_api
   apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87

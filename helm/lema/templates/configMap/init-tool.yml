@@ -36,6 +36,8 @@ metadata:
 data:
   ISOL_AUTH_SERVICE_ADMIN_USER: "{{ .Values.auth.adminUser | b64enc }}"
   ISOL_AUTH_SERVICE_ADMIN_PASS: "{{ .Values.auth.adminPassword | b64enc }}"
+  ISOL_INIT_AUTH_ADMIN_USERNAME: "{{  .Values.auth.createAdminUsername | b64enc }}"
+  ISOL_INIT_AUTH_ADMIN_PASSWORD: "{{  .Values.auth.createAdminPassword | b64enc }}"
   ISOL_AUTH_SERVICE_API_CLIENT_SECRET: "{{ .Values.auth.apiClientSecret | b64enc }}"
   ISOL_AUDIT_USERNAME: "{{ .Values.audit.username | b64enc }}"
   ISOL_AUDIT_PASSWORD: "{{ .Values.audit.password | b64enc }}"
