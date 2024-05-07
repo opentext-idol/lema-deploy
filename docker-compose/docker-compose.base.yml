@@ -12,7 +12,5 @@
 # information contained herein is subject to change without notice.
 #
 
-version: "3"
-
 networks:
   main:
