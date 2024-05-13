@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.api.config }}
 data:
-  SPRING_PROFILES_ACTIVE: "{{ .Values.api.applicationType }}"
   ISOL_ENTITY_STORAGEDB_HOST: "{{ .Values.entity.storage.service.name }}"
   ISOL_ENTITY_STORAGEDB_PORT: "{{ .Values.entity.storage.service.port }}"
   ISOL_ENTITY_INDEXDB_HOST: "{{ .Values.entity.index.service.name }}"

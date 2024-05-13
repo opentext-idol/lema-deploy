@@ -211,7 +211,7 @@ api:
   replicas: 1
   container: api-container
   internalPort: 8080
-  image: solutions-api-service
+  image: solutions-lema-api-service
   config: api-config
   secret: api-secret
   applicationType: lema
