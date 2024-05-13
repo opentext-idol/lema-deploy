@@ -22,20 +22,20 @@ spec:
   ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           volumeMounts:
-            - name: {{ .Values.initTool.entityData.volume }}
+            - name: {{ .Values.dataEntity.volume }}
               mountPath: /target-volume
-            - name: {{ .Values.initTool.filesConfig.volumeName }}
+            - name: {{ .Values.api.filesConfig.volumeName }}
               mountPath: /source-data/02-custom.yaml
               subPath: entitySchema
               readOnly: true
 
       volumes:
-        - name: {{ .Values.initTool.entityData.volume }}
+        - name: {{ .Values.dataEntity.volume }}
           persistentVolumeClaim:
-            claimName: {{ .Values.initTool.entityData.volumeClaim }}
-        - name: {{ .Values.initTool.filesConfig.volumeName }}
+            claimName: {{ .Values.dataEntity.volumeClaim }}
+        - name: {{ .Values.api.filesConfig.volumeName }}
           configMap:
-            name: {{ .Values.initTool.filesConfig.configName }}
+            name: {{ .Values.api.filesConfig.configName }}
 
       imagePullSecrets:
         - name: {{ .Values.secret.name }}
