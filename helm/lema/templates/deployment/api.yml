@@ -30,7 +30,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.api.config }}
           volumeMounts:
-            - name: {{ .Values.initTool.entityData.volume }}
+            - name: {{ .Values.dataEntity.volume }}
               mountPath: /data/entity
           startupProbe:
 {{ include "probe.api" . | indent 12 }}
@@ -46,9 +46,9 @@ spec:
             failureThreshold: 20
 
       volumes:
-        - name: {{ .Values.initTool.entityData.volume }}
+        - name: {{ .Values.dataEntity.volume }}
           persistentVolumeClaim:
-            claimName: {{ .Values.initTool.entityData.volumeClaim }}
+            claimName: {{ .Values.dataEntity.volumeClaim }}
       imagePullSecrets:
         - name: {{ .Values.secret.name }}
 ---

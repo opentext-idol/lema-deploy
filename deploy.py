@@ -185,8 +185,6 @@ def main():
 
     if program_args.component:
         components = program_args.component + ['data-entity']
-        if 'auth' in components or 'api' in components:
-            components.append('init')
         validate_components(components, component_paths)
         deploy(components, component_paths, program_args)
 

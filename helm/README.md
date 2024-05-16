@@ -96,4 +96,4 @@ The following persistent volume claims are created:
 | entity-index-db-data   | 5GiB             | Search index for application data   |
 | filestore-data         | 1TiB             | Uploaded and generated files        |
 | audit-db-data          | 1GiB             | Audit logs                          |
-| api-entity-data        | 100MiB           | Schema for application data         |
+| system-entity-data     | 100MiB           | Schema for application data         |
