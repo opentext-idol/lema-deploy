@@ -5,3 +5,5 @@ metadata:
 data:
   ISOL_LICENSE_SERVER_HOST: "{{ .Values.licenseServer.service.name}}"
   ISOL_LICENSE_SERVER_PORT: "{{ .Values.licenseServer.service.port }}"
+  ISOL_ENTITY_IDOL_SECURITY_ACL_FORMAT: "{{ .Values.api.idolSecurity.aclFormat }}"
+  ISOL_ENTITY_IDOL_SECURITY_ACL_CHECK: "{{ .Values.api.idolSecurity.aclCheck }}"
