@@ -15,7 +15,7 @@
 services:
 
   ui:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}lema-ui${ISOL_DOCKER_VERSION_SEP}${LEMA_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}lema-ui${ISOL_DOCKER_VERSION_SEP}${UI_VERSION}
     networks:
       - main
     volumes:
