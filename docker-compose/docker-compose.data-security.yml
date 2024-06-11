@@ -1,0 +1,39 @@
+#
+# Copyright 2021-2024 Open Text.
+#
+# Licensed under the MIT License (the "License"); you may not use this file
+# except in compliance with the License.
+#
+# The only warranties for products and services of Open Text and its affiliates
+# and licensors ("Open Text") are as may be set forth in the express warranty
+# statements accompanying such products and services. Nothing herein should be
+# construed as constituting an additional warranty. Open Text shall not be
+# liable for technical or editorial errors or omissions contained herein. The
+# information contained herein is subject to change without notice.
+#
+
+services:
+
+  data-security:
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
+    # create a container but don't do anything, so the container is available to list to discover all required images
+    entrypoint: "true"
+    networks:
+      - main
+
+  data-security-custom:
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security-custom${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
+    build:
+      context: ../data/security
+      args:
+        BASE_IMAGE: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
+    networks:
+      - main
+    volumes:
+      - security-data:/target-volume
+    environment:
+      - ISOL_SECURITY_TLS=entity-indexdb ${ISOL_ENTITY_INDEXDB_HOST} ${ISOL_ENTITY_INDEXDB_SAN}
+      - ISOL_SECURITY_SECURITYINFO=entity-indexdb
+
+volumes:
+  security-data:

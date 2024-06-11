@@ -31,10 +31,15 @@ spec:
             - configMapRef:
                 name:  {{ .Values.entity.index.config }}
           volumeMounts:
+            - name: {{ .Values.dataSecurity.volume }}
+              mountPath: /data/security
             - name: {{ .Values.entity.index.dataVolume }}
               mountPath: /content/index
 
       volumes:
+        - name: {{ .Values.dataSecurity.volume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.dataSecurity.volumeClaim }}
         - name: {{ .Values.entity.index.dataVolume }}
           persistentVolumeClaim:
             claimName: {{ .Values.entity.index.dataVolumeClaim }}
