@@ -97,3 +97,4 @@ The following persistent volume claims are created:
 | filestore-data         | 1TiB             | Uploaded and generated files        |
 | audit-db-data          | 1GiB             | Audit logs                          |
 | system-entity-data     | 100MiB           | Schema for application data         |
+| system-security-data   | 100MiB           | Security-related data               |

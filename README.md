@@ -128,6 +128,7 @@ Docker volumes are created with the prefix `opentext-idol-lema_`, which can be c
 | audit             | audit-db-data                  | Audit logs                          |
 | dataset-locations | dataset-locations-license-data | Cache for license information       |
 | -                 | entity-data                    | Schema for application data         |
+| -                 | security-data                  | Security-related data               |
 
 All containers connect to a Docker network called `opentext-idol-lema_main`.  The
 `opentext-idol-lema` prefix can be changed using the `COMPOSE_PROJECT_NAME` setting.

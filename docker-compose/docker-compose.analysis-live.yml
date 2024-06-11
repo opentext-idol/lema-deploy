@@ -19,6 +19,8 @@ services:
     networks:
       - main
     volumes:
+      - security-data:/data/security
+      - entity-data:/data/entity
       - analysis-live-mediaserver-license-data:/mediaserver/license-cache
       - analysis-live-mediaserver-output:/mediaserver/output
     ports:
@@ -36,11 +38,16 @@ services:
       - analysis-live-mediaserver-output:/mediaserver-output
       - entity-data:/data/entity
     environment:
+      - ISOL_SECURITY_DATA_VOLUME_PATH=/data/security
       - ISOL_ENTITY_STORAGEDB_HOST=${ISOL_ENTITY_STORAGEDB_HOST}
       - ISOL_ENTITY_STORAGEDB_PORT=${ISOL_ENTITY_STORAGEDB_PORT}
+      - ISOL_ENTITY_INDEXDB_PROTOCOL=${ISOL_ENTITY_INDEXDB_PROTOCOL}
       - ISOL_ENTITY_INDEXDB_HOST=${ISOL_ENTITY_INDEXDB_HOST}
       - ISOL_ENTITY_INDEXDB_ACI_PORT=${ISOL_ENTITY_INDEXDB_ACI_PORT}
       - ISOL_ENTITY_INDEXDB_INDEX_PORT=${ISOL_ENTITY_INDEXDB_INDEX_PORT}
+      - ISOL_ENTITY_INDEXDB_COMMUNITY_PROTOCOL=${ISOL_ENTITY_INDEXDB_COMMUNITY_PROTOCOL}
+      - ISOL_ENTITY_INDEXDB_COMMUNITY_HOST=${ISOL_ENTITY_INDEXDB_COMMUNITY_HOST}
+      - ISOL_ENTITY_INDEXDB_COMMUNITY_ACI_PORT=${ISOL_ENTITY_INDEXDB_COMMUNITY_ACI_PORT}
       - ISOL_ENTITY_DATA_VOLUME_PATH=/data/entity
       - ISOL_AUDIT_HOST=${ISOL_AUDIT_DB_HOST}
       - ISOL_AUDIT_PORT=${ISOL_AUDIT_DB_PORT}
@@ -51,6 +58,7 @@ services:
       - ISOL_ANALYSIS_LIVE_MEDIASERVER_ACI_PORT=14000
 
 volumes:
+  security-data:
+  entity-data:
   analysis-live-mediaserver-license-data:
   analysis-live-mediaserver-output:
-  entity-data:

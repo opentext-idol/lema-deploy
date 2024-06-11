@@ -19,6 +19,7 @@ services:
     networks:
       - main
     volumes:
+      - security-data:/data/security
       - entity-indexdb-data:/content/index
       - entity-indexdb-license-data:/content/license-cache
     ports:
@@ -44,6 +45,7 @@ services:
       - HEAP_NEWSIZE=${ISOL_ENTITY_STORAGEDB_HEAP_NEWSIZE}
 
 volumes:
+  security-data:
   entity-storagedb-data:
   entity-indexdb-data:
   entity-indexdb-license-data:

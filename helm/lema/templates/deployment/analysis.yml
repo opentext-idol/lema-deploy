@@ -31,6 +31,8 @@ spec:
             - configMapRef:
                 name: {{ .Values.analysis.config }}
           volumeMounts:
+            - name: {{ .Values.dataSecurity.volume }}
+              mountPath: /data/security
             - name: {{ .Values.dataEntity.volume }}
               mountPath: /data/entity
           startupProbe:
@@ -46,6 +48,9 @@ spec:
             periodSeconds: 60
             failureThreshold: 20
       volumes:
+        - name: {{ .Values.dataSecurity.volume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.dataSecurity.volumeClaim }}
         - name: {{ .Values.dataEntity.volume }}
           persistentVolumeClaim:
             claimName: {{ .Values.dataEntity.volumeClaim }}

@@ -28,6 +28,15 @@ docker:
     lema: 24.2.2
     postgres: 16.1
 
+dataSecurity:
+  name: data-security
+  container: data-security
+  image: solutions-data-security
+  config: data-security-config
+  volume: system-security-data
+  volumeClaim: system-security-data
+  volumeSize: 100M
+
 auth:
   enabled: true
   name: auth
@@ -92,8 +101,13 @@ entity:
     dataVolume: entity-index-db-data
     dataVolumeClaim: entity-index-db-data
     dataVolumeSize: 5Gi
+    community:
+      protocol: http
+      host:
+      aciPort: 9030
     service:
       name: entity-index-db-service
+      protocol: http
       queryPort: 9100
       indexPort: 9101
     ingress:
@@ -161,7 +175,6 @@ analysis:
       handleHTTPResponseSuccess: 1
       htmlFromDocumentRouteOnAttribute: 1
       setContent: 1
-
   service:
     name: analysis-service
     port: 8090

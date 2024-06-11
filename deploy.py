@@ -184,7 +184,7 @@ def main():
     component_paths = get_component_paths(program_args)
 
     if program_args.component:
-        components = program_args.component + ['data-entity']
+        components = program_args.component + ['data-entity', 'data-security']
         validate_components(components, component_paths)
         deploy(components, component_paths, program_args)
 

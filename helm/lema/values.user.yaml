@@ -54,6 +54,8 @@ entity:
     enabled: true
     # Maximum database size
     dataVolumeSize: 5Gi
+    service:
+      protocol: http
   # Cassandra-compatible database backend
   storage:
     # Whether to deploy the component
@@ -103,7 +105,6 @@ analysis:
       transcodeVideo: 4
       vehicleAnalysis: 4
       videoClip: 4
-
 
 # PostgreSQL database server storing audit logs
 audit:
