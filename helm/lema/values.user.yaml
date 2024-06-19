@@ -144,7 +144,11 @@ api:
     default: 500
     # The default number of entity IDs retrieved in a single suggest traversal
     suggestDefault: 500
-
+  logging:
+    # The log level for general api service log messages
+    apiLogLevel: INFO
+    # The log level for audit related log messages
+    auditLogLevel: WARN
 # LEMA user interface
 lemaUi:
   # Whether to deploy the component

@@ -238,6 +238,9 @@ api:
     minEventAgeSeconds: 60
   stats:
     minAnalysisJobAgeSeconds: 60
+  logging:
+    apiLogLevel: INFO
+    auditLogLevel: WARN
   service:
     name: api-service
     port: 8080
