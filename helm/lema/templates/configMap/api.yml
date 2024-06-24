@@ -66,6 +66,7 @@ data:
   ISOL_ENTITY_DEFAULT_MAX_RESULTS: "{{ .Values.api.maxResults.default }}"
   ISOL_ENTITY_DEFAULT_MAX_SUGGEST_RESULTS: "{{ .Values.api.maxResults.suggestDefault }}"
   ISOL_ENTITY_IDOL_SECURITY_MODE: "{{ .Values.api.idolSecurity.mode }}"
+  ISOL_ENTITY_IDOL_SECURITY_TYPE: "{{ .Values.api.idolSecurity.type }}"
   ISOL_API_SERVICE_API_LOG_LEVEL: "{{ .Values.api.logging.apiLogLevel }}"
   ISOL_API_SERVICE_AUDIT_LOG_LEVEL: "{{ .Values.api.logging.auditLogLevel }}"
 
