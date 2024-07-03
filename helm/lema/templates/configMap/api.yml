@@ -3,11 +3,17 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.api.config }}
 data:
+  ISOL_SECURITY_DATA_VOLUME_PATH: "/data/security"
+
   ISOL_ENTITY_STORAGEDB_HOST: "{{ .Values.entity.storage.service.name }}"
   ISOL_ENTITY_STORAGEDB_PORT: "{{ .Values.entity.storage.service.port }}"
+  ISOL_ENTITY_INDEXDB_PROTOCOL: "{{ .Values.entity.index.service.protocol }}"
   ISOL_ENTITY_INDEXDB_HOST: "{{ .Values.entity.index.service.name }}"
   ISOL_ENTITY_INDEXDB_ACI_PORT: "{{ .Values.entity.index.service.queryPort }}"
   ISOL_ENTITY_INDEXDB_INDEX_PORT: "{{ .Values.entity.index.service.indexPort }}"
+  ISOL_ENTITY_INDEXDB_COMMUNITY_PROTOCOL: "{{ .Values.entity.index.community.protocol }}"
+  ISOL_ENTITY_INDEXDB_COMMUNITY_HOST: "{{ .Values.entity.index.community.host }}"
+  ISOL_ENTITY_INDEXDB_COMMUNITY_ACI_PORT: "{{ .Values.entity.index.community.aciPort }}"
 
   ISOL_AUTH_SERVICE_PROTOCOL: "{{ .Values.auth.service.protocol }}"
   ISOL_AUTH_SERVICE_HOST: "{{ .Values.auth.service.name }}"
@@ -43,6 +49,7 @@ data:
   ISOL_AUDIT_HOST: "{{ .Values.audit.service.name }}"
   ISOL_AUDIT_PORT: "{{ .Values.audit.service.port }}"
   ISOL_AUDIT_DATABASE_NAME: "{{ .Values.audit.database }}"
+
   ISOL_API_SERVICE_APPLICATION_TYPE: "{{ .Values.api.applicationType }}"
   ISOL_API_SERVICE_ALLOWED_ORIGINS:  "{{ .Values.external.protocol }}://{{ .Values.external.host }}"
   ISOL_API_SERVICE_BASE_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}:{{ .Values.external.port }}{{ .Values.api.external.path }}"
@@ -59,6 +66,7 @@ data:
   ISOL_ENTITY_DEFAULT_MAX_RESULTS: "{{ .Values.api.maxResults.default }}"
   ISOL_ENTITY_DEFAULT_MAX_SUGGEST_RESULTS: "{{ .Values.api.maxResults.suggestDefault }}"
   ISOL_ENTITY_IDOL_SECURITY_MODE: "{{ .Values.api.idolSecurity.mode }}"
+  ISOL_ENTITY_IDOL_SECURITY_TYPE: "{{ .Values.api.idolSecurity.type }}"
   ISOL_API_SERVICE_API_LOG_LEVEL: "{{ .Values.api.logging.apiLogLevel }}"
   ISOL_API_SERVICE_AUDIT_LOG_LEVEL: "{{ .Values.api.logging.auditLogLevel }}"
 

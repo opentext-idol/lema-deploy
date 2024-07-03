@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Values.dataSecurity.name }}"
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.dataSecurity.name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: {{ .Values.dataSecurity.container }}
+{{ include "image" (dict
+  "Values" .Values
+  "imageName" .Values.dataSecurity.image
+  "version" .Values.docker.versions.api
+  ) | indent 10 }}
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.dataSecurity.config }}
+          volumeMounts:
+            - name: {{ .Values.dataSecurity.volume }}
+              mountPath: /target-volume
+
+      volumes:
+        - name: {{ .Values.dataSecurity.volume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.dataSecurity.volumeClaim }}
+
+      imagePullSecrets:
+        - name: {{ .Values.secret.name }}

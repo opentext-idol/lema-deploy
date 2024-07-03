@@ -19,6 +19,7 @@ services:
     networks:
       - main
     volumes:
+      - security-data:/data/security
       - entity-indexdb-data:/content/index
       - entity-indexdb-license-data:/content/license-cache
     ports:
@@ -30,6 +31,7 @@ services:
       - ISOL_LICENSE_SERVER_PORT=${ISOL_LICENSE_SERVER_PORT}
       - ISOL_ENTITY_IDOL_SECURITY_ACL_FORMAT=${ISOL_ENTITY_IDOL_SECURITY_ACL_FORMAT}
       - ISOL_ENTITY_IDOL_SECURITY_ACL_CHECK=${ISOL_ENTITY_IDOL_SECURITY_ACL_CHECK}
+      - ISOL_ENTITY_IDOL_SECURITY_TYPE=${ISOL_ENTITY_IDOL_SECURITY_TYPE}
 
   entity-storagedb:
     image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-entity-storagedb${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
@@ -44,6 +46,7 @@ services:
       - HEAP_NEWSIZE=${ISOL_ENTITY_STORAGEDB_HEAP_NEWSIZE}
 
 volumes:
+  security-data:
   entity-storagedb-data:
   entity-indexdb-data:
   entity-indexdb-license-data:
