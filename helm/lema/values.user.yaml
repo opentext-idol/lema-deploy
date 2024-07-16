@@ -145,6 +145,8 @@ api:
     default: 500
     # The default number of entity IDs retrieved in a single suggest traversal
     suggestDefault: 500
+  watchlists:
+    enabled: true
   logging:
     # The log level for general api service log messages
     apiLogLevel: INFO

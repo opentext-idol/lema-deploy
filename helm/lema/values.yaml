@@ -250,6 +250,7 @@ api:
     aclCheck: "NU=[DU]?F:-,NG=[DG]?F:-,E=1?P:-,U=[DU]?P:-,G=[DG]?P:F"
     type: Generic_V4
   watchlists:
+    enabled: true
     minEventAgeSeconds: 60
   stats:
     minAnalysisJobAgeSeconds: 60

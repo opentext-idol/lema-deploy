@@ -20,6 +20,7 @@ data:
   ISOL_ENTITY_INDEXDB_COMMUNITY_ACI_PORT: "{{ .Values.entity.index.community.aciPort }}"
   ISOL_ENTITY_DATA_VOLUME_PATH: "/data/entity"
   ISOL_ENTITY_IDOL_SECURITY_TYPE: "{{ .Values.api.idolSecurity.type }}"
+  ISOL_WATCHLIST_ENABLED: "{{ .Values.api.watchlists.enabled }}"
   ISOL_FILE_STORE_URL: "{{ .Values.filestore.service.protocol }}://{{ .Values.filestore.service.name }}:{{ .Values.filestore.service.port }}{{ .Values.filestore.service.path }}"
   ISOL_FILE_STORE_BUCKET: "{{ .Values.filestore.bucket }}"
   ISOL_ANALYSIS_HOST: "{{ .Values.analysis.service.name }}"
