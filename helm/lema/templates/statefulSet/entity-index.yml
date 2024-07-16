@@ -21,7 +21,7 @@ spec:
 {{ include "image" (dict
   "Values" .Values
   "imageName" .Values.entity.index.image
-  "version" .Values.docker.versions.base
+  "version" .Values.docker.versions.api
   ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           ports:
