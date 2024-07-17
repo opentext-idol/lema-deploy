@@ -50,13 +50,13 @@ data:
   ISOL_AUDIT_PORT: "{{ .Values.audit.service.port }}"
   ISOL_AUDIT_DATABASE_NAME: "{{ .Values.audit.database }}"
 
-  ISOL_API_SERVICE_APPLICATION_TYPE: "{{ .Values.api.applicationType }}"
   ISOL_API_SERVICE_ALLOWED_ORIGINS:  "{{ .Values.external.protocol }}://{{ .Values.external.host }}"
   ISOL_API_SERVICE_BASE_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}:{{ .Values.external.port }}{{ .Values.api.external.path }}"
   ISOL_API_SERVICE_API_ENABLED: "{{ .Values.api.apiEnabled }}"
   ISOL_API_SERVICE_INIT_ENABLED: "{{ .Values.api.initEnabled }}"
   ISOL_API_SERVICE_SCHEDULE_ENABLED: "{{ .Values.api.scheduleEnabled }}"
 
+  ISOL_WATCHLIST_ENABLED: "{{ .Values.api.watchlists.enabled }}"
   ISOL_WATCHLIST_MIN_EVENT_AGE_SECONDS: "{{ .Values.api.watchlists.minEventAgeSeconds }}"
   ISOL_STATS_MIN_ANALYSIS_JOB_EVENT_AGE_SECONDS: "{{ .Values.api.stats.minAnalysisJobAgeSeconds }}"
   ISOL_API_SERVICE_INTERNAL_PORT: "{{ .Values.api.internalPort }}"

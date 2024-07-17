@@ -19,7 +19,7 @@ spec:
 {{ include "image" (dict
   "Values" .Values
   "imageName" .Values.api.image
-  "version" .Values.docker.versions.api
+  "version" .Values.docker.versions.lemaApi
   ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           ports:
