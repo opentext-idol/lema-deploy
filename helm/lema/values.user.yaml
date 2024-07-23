@@ -55,7 +55,7 @@ entity:
     # Maximum database size
     dataVolumeSize: 5Gi
     service:
-      protocol: http
+      protocol: https
   # Cassandra-compatible database backend
   storage:
     # Whether to deploy the component
