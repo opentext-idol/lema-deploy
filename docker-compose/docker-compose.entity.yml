@@ -38,7 +38,7 @@ services:
     networks:
       - main
     volumes:
-      - entity-storagedb-data:/var/lib/cassandra
+      - entity-storagedb-data:/opt/cassandra/data
     ports:
       - ${ISOL_ENTITY_STORAGEDB_DOCKER_PORT}:9042
     environment:
