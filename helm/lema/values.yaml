@@ -108,7 +108,7 @@ entity:
       aciPort: 9030
     service:
       name: entity-index-db-service
-      protocol: http
+      protocol: https
       queryPort: 9100
       indexPort: 9101
     ingress:
