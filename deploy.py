@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2023 Open Text.
+# Copyright 2021-2024 Open Text.
 #
 # Licensed under the MIT License (the "License"); you may not use this file
 # except in compliance with the License.
@@ -163,9 +163,9 @@ def get_compose_args(components, component_paths, options,
     return compose_args
 
 
-def run_compose(components, component_paths, options, skip_pull, detach=True, remove=False, log_level='info'):
-    command = ['up', f'--pull={"never" if skip_pull else "always"}', '--build']
-    if options.skip_deploy:
+def run_compose(components, component_paths, options, skip_deploy, detach, remove, log_level='info'):
+    command = ['up', f'--pull={"never" if options.skip_pull else "always"}', '--build']
+    if skip_deploy:
         command.append('--no-start')
     run_process(get_compose_args(components, component_paths, options, command, detach, remove, log_level=log_level))
 
@@ -176,7 +176,12 @@ def deploy(components, component_paths, options):
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, component_paths, options, options.skip_pull, remove=True)
+    # - don't remove if --skip-deploy, so that data containers persist afterwards
+    # - we want to restart if already running, to ensure that data volume changes are picked up; to avoid starting
+    #   twice, this line will only create containers
+    run_compose(components, component_paths, options, skip_deploy=True, detach=False, remove=not options.skip_deploy)
+    if not options.skip_deploy:
+        run_process(get_compose_args(components, component_paths, options, ['restart']))
 
 
 def main():
@@ -184,7 +189,9 @@ def main():
     component_paths = get_component_paths(program_args)
 
     if program_args.component:
-        components = program_args.component + ['data-entity', 'data-security']
+        run_compose(['data-entity', 'data-security'], component_paths, program_args,
+                    skip_deploy=program_args.skip_deploy, detach=False, remove=False, log_level='error')
+        components = program_args.component
         validate_components(components, component_paths)
         deploy(components, component_paths, program_args)
 
