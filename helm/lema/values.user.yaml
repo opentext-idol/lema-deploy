@@ -30,7 +30,11 @@ auth:
   # Client to configure and use for logging into the UI
   uiClient: lema_ui
   # Expiry time in seconds for login tokens
-  tokenExpiryTimeSeconds: 600
+  tokenExpiryTimeSeconds: 300
+  # Idle timeout in seconds for login sessions
+  sessionIdleTimeSeconds: 3600
+  # Expiry time in seconds for login sessions
+  sessionExpiryTimeSeconds: 86400
   external:
     # Path on the Kubernetes server to make the Keycloak API and admin UI accessible from; must end with /
     path: /auth/
