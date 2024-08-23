@@ -31,7 +31,7 @@ spec:
                 name: {{ .Values.entity.storage.config }}
           volumeMounts:
             - name: {{ .Values.entity.storage.dataVolume }}
-              mountPath: /var/lib/cassandra
+              mountPath: /opt/cassandra/data
       volumes:
         - name: {{ .Values.entity.storage.dataVolume }}
           persistentVolumeClaim:

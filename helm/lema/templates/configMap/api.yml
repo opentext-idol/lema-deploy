@@ -29,6 +29,8 @@ data:
   ISOL_AUTH_SERVICE_UI_CLIENT: "{{ .Values.auth.uiClient }}"
   ISOL_AUTH_SERVICE_UI_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}{{ .Values.lemaUi.external.path }}*"
   ISOL_AUTH_SERVICE_TOKEN_EXPIRY_TIME: "{{ .Values.auth.tokenExpiryTimeSeconds }}"
+  ISOL_AUTH_SERVICE_SESSION_IDLE_TIME: "{{ .Values.auth.sessionIdleTimeSeconds }}"
+  ISOL_AUTH_SERVICE_SESSION_EXPIRY_TIME: "{{ .Values.auth.sessionExpiryTimeSeconds }}"
   ISOL_AUTH_SERVICE_BASE_REALM_ROLES: "{{ .Values.auth.baseRealmRoles }}"
 
   ISOL_FILE_STORE_PROTOCOL: "{{ .Values.filestore.service.protocol }}"

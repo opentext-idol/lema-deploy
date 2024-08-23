@@ -54,7 +54,9 @@ auth:
   apiClient: lema_api
   apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87
   uiClient: lema_ui
-  tokenExpiryTimeSeconds: 600
+  tokenExpiryTimeSeconds: 300
+  sessionIdleTimeSeconds: 3600
+  sessionExpiryTimeSeconds: 86400
   baseRealmRoles: analyst,requestor,supervisor
   external:
     # must end with /
@@ -108,7 +110,7 @@ entity:
       aciPort: 9030
     service:
       name: entity-index-db-service
-      protocol: http
+      protocol: https
       queryPort: 9100
       indexPort: 9101
     ingress:
