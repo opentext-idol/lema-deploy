@@ -25,8 +25,18 @@ docker:
     datasets: 24.2.0
     analysis: 24.2.0
     lemaData: 24.2.0
+    lemaApi: 24.2.0
     lema: 24.2.2
     postgres: 16.1
+
+dataSecurity:
+  name: data-security
+  container: data-security
+  image: solutions-data-security
+  config: data-security-config
+  volume: system-security-data
+  volumeClaim: system-security-data
+  volumeSize: 100M
 
 auth:
   enabled: true
@@ -39,10 +49,14 @@ auth:
   adminUser: lema-auth
   adminPassword: lema-auth
   realm: lema
+  createAdminUsername: admin
+  createAdminPassword: admin
   apiClient: lema_api
   apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87
   uiClient: lema_ui
-  tokenExpiryTimeSeconds: 600
+  tokenExpiryTimeSeconds: 300
+  sessionIdleTimeSeconds: 3600
+  sessionExpiryTimeSeconds: 86400
   baseRealmRoles: analyst,requestor,supervisor
   external:
     # must end with /
@@ -90,8 +104,13 @@ entity:
     dataVolume: entity-index-db-data
     dataVolumeClaim: entity-index-db-data
     dataVolumeSize: 5Gi
+    community:
+      protocol: http
+      host:
+      aciPort: 9030
     service:
       name: entity-index-db-service
+      protocol: https
       queryPort: 9100
       indexPort: 9101
     ingress:
@@ -159,7 +178,6 @@ analysis:
       handleHTTPResponseSuccess: 1
       htmlFromDocumentRouteOnAttribute: 1
       setContent: 1
-
   service:
     name: analysis-service
     port: 8090
@@ -209,10 +227,16 @@ api:
   replicas: 1
   container: api-container
   internalPort: 8080
-  image: solutions-api-service
+  image: solutions-lema-api-service
   config: api-config
   secret: api-secret
+  filesConfig:
+    configName: api-config-files
+    volumeName: api-config-files
   applicationType: lema
+  apiEnabled: true
+  initEnabled: true
+  scheduleEnabled: true
   external:
     path: /api/
   expiry:
@@ -222,10 +246,19 @@ api:
     max: 10000
     default: 500
     suggestDefault: 500
+  idolSecurity:
+    mode: denyAll
+    aclFormat: "<E=B!>:U:<U=SLE+>:G:<G=SLE+>:NU:<NU=SLE->:NG:<NG=SLE->"
+    aclCheck: "NU=[DU]?F:-,NG=[DG]?F:-,E=1?P:-,U=[DU]?P:-,G=[DG]?P:F"
+    type: Generic_V4
   watchlists:
+    enabled: true
     minEventAgeSeconds: 60
   stats:
     minAnalysisJobAgeSeconds: 60
+  logging:
+    apiLogLevel: INFO
+    auditLogLevel: WARN
   service:
     name: api-service
     port: 8080
@@ -234,13 +267,9 @@ dataEntity:
   name: data-entity
   container: data-entity
   image: solutions-lema-data-entity
-
-authSetup:
-  name: auth-setup
-  container: auth-setup
-  image: solutions-auth-setup
-  config: auth-setup-config
-  secret: auth-setup-secret
+  volume: system-entity-data
+  volumeClaim: system-entity-data
+  volumeSize: 100M
 
 lemaUi:
   enabled: true
@@ -254,16 +283,3 @@ lemaUi:
     port: 80
   external:
     path: /lema/
-
-initTool:
-  name: init-tool
-  container: init-tool-container
-  image: solutions-init-tool
-  config: init-tool-config
-  entityData:
-    volume: init-entity-data
-    volumeClaim: init-entity-data
-    volumeSize: 100M
-  filesConfig:
-    configName: init-config-files
-    volumeName: init-config-files

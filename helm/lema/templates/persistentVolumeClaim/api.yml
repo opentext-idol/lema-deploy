@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.initTool.entityData.volumeClaim }}
+  name: {{ .Values.dataEntity.volumeClaim }}
 spec:
   storageClassName: standard
   accessModes:
@@ -10,4 +10,4 @@ spec:
     - ReadOnlyMany
   resources:
     requests:
-      storage: {{ .Values.initTool.entityData.volumeSize }}
+      storage: {{ .Values.dataEntity.volumeSize }}

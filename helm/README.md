@@ -21,9 +21,9 @@ You will need to install:
 
 ## Configuration
 
-You can configure LEMA by modifying the YAML file `values.yaml`.  It is recommended to review all settings before
-deploying, especially passwords and maximum volume sizes.  Read below to learn about the required values that you must
-fill in.
+You can configure LEMA by modifying the YAML file `lema/values.user.yaml`.  It is recommended to review all
+settings before deploying, especially passwords and maximum volume sizes.  Read below to learn about the required values
+that you must fill in.
 
 ### Docker Hub login
 
@@ -62,9 +62,9 @@ helm install --values lema/values.user.yaml lema ./lema/
 ```
 
 After the system has started:
-* Add a user with the `admin` role (refer to the LEMA Administration Guide for details).
 * With the default configuration, access the LEMA UI at `http://your-kubernetes-server/lema/`.
-* Log in with the user you created. The LEMA UI will then perform a one-off initialization.
+* Log in with the admin user (see `auth.createAdminUsername` in `lema/values.user.yaml`). The LEMA UI will then
+  perform a one-off initialization.
 
 ## Entities database schema
 
@@ -96,4 +96,5 @@ The following persistent volume claims are created:
 | entity-index-db-data   | 5GiB             | Search index for application data   |
 | filestore-data         | 1TiB             | Uploaded and generated files        |
 | audit-db-data          | 1GiB             | Audit logs                          |
-| api-entity-data        | 100MiB           | Schema for application data         |
+| system-entity-data     | 100MiB           | Schema for application data         |
+| system-security-data   | 100MiB           | Security-related data               |

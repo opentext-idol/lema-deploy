@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2023 Open Text.
+# Copyright 2021-2024 Open Text.
 #
 # Licensed under the MIT License (the "License"); you may not use this file
 # except in compliance with the License.
@@ -14,23 +14,26 @@
 
 services:
 
-  lema-data-entity:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-lema-data-entity${ISOL_DOCKER_VERSION_SEP}${APP_DATA_VERSION}
+  data-security:
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
     # create a container but don't do anything, so the container is available to list to discover all required images
     entrypoint: "true"
     networks:
       - main
 
-  lema-data-entity-custom:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-lema-data-entity-custom${ISOL_DOCKER_VERSION_SEP}${APP_DATA_VERSION}
+  data-security-custom:
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security-custom${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
     build:
-      context: ../data/entity
+      context: ../data/security
       args:
-        BASE_IMAGE: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-lema-data-entity${ISOL_DOCKER_VERSION_SEP}${APP_DATA_VERSION}
+        BASE_IMAGE: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
     networks:
       - main
     volumes:
-      - entity-data:/target-volume
+      - security-data:/target-volume
+    environment:
+      - ISOL_SECURITY_TLS=entity-indexdb ${ISOL_ENTITY_INDEXDB_HOST} ${ISOL_ENTITY_INDEXDB_SAN}
+      - ISOL_SECURITY_SECURITYINFO=entity-indexdb
 
 volumes:
-  entity-data:
+  security-data:

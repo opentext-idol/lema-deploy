@@ -19,7 +19,7 @@ spec:
 {{ include "image" (dict
   "Values" .Values
   "imageName" .Values.api.image
-  "version" .Values.docker.versions.api
+  "version" .Values.docker.versions.lemaApi
   ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           ports:
@@ -30,7 +30,9 @@ spec:
             - configMapRef:
                 name: {{ .Values.api.config }}
           volumeMounts:
-            - name: {{ .Values.initTool.entityData.volume }}
+            - name: {{ .Values.dataSecurity.volume }}
+              mountPath: /data/security
+            - name: {{ .Values.dataEntity.volume }}
               mountPath: /data/entity
           startupProbe:
 {{ include "probe.api" . | indent 12 }}
@@ -46,9 +48,12 @@ spec:
             failureThreshold: 20
 
       volumes:
-        - name: {{ .Values.initTool.entityData.volume }}
+        - name: {{ .Values.dataSecurity.volume }}
           persistentVolumeClaim:
-            claimName: {{ .Values.initTool.entityData.volumeClaim }}
+            claimName: {{ .Values.dataSecurity.volumeClaim }}
+        - name: {{ .Values.dataEntity.volume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.dataEntity.volumeClaim }}
       imagePullSecrets:
         - name: {{ .Values.secret.name }}
 ---

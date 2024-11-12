@@ -27,13 +27,14 @@ Run the `deploy.py` tool using Python.  (Much like when running `docker`, you
 may have to run it as a different user with sufficient permissions to manage Docker containers.)
 
 ```
-python3 deploy.py --init auth entity filestore analysis audit api ui
+python3 deploy.py auth entity filestore analysis audit api ui
 ```
 
 With the default configuration, the LEMA UI will be available at `https://localhost:8070` once the
 system has started.
 
-After the system has started, log in with a user that has the `admin` role. The LEMA UI will then perform a one off initialization. 
+After the system has started, log in with the admin user (see `ISOL_INIT_AUTH_ADMIN_USERNAME` in `config/base.env`). The
+LEMA UI will then perform a one off initialization. 
 
 To show options and other usage information, run:
 
@@ -71,17 +72,13 @@ customized once, before deploying the system.  Customizations are saved permanen
 To use HTTP instead of HTTPS, for testing purposes only, run:
 
 ```
-python3 deploy.py --disable-encryption --init auth entity filestore analysis audit api ui
+python3 deploy.py --disable-encryption auth entity filestore analysis audit api ui
 ```
 
 > note: changes to the encryption state of a deployed system require manual deletion of the realm in Keycloak before running `deploy.py` with the new state.
 
 To resume a stopped LEMA system, or to apply changes made to configuration files, or to change which
-components are deployed: run the normal command to deploy, but without the `--init` argument:
-
-```
-python3 deploy.py auth entity filestore analysis audit api ui
-```
+components are deployed: run the normal command to deploy.
 
 To stop and remove deployed LEMA services, run the Python `deploy.py` tool with no arguments:
 
@@ -92,12 +89,11 @@ python3 deploy.py
 You can deploy components on different hosts, or deploy some components separately using a
 compatible implementation (read the `deploy.py` tool help text for a list of components).  For
 example, to use an existing object storage server and deploy the audit database on a separate host,
-configure hosts and ports in the files in `config/`, and then run on separate hosts (note that
-`--init` need only be run once):
+configure hosts and ports in the files in `config/`, and then run on separate hosts:
 
 ```
 python3 deploy.py audit
-python3 deploy.py --init auth entity analysis api ui
+python3 deploy.py auth entity analysis api ui
 ```
 
 ## System information
@@ -132,6 +128,7 @@ Docker volumes are created with the prefix `opentext-idol-lema_`, which can be c
 | audit             | audit-db-data                  | Audit logs                          |
 | dataset-locations | dataset-locations-license-data | Cache for license information       |
 | -                 | entity-data                    | Schema for application data         |
+| -                 | security-data                  | Security-related data               |
 
 All containers connect to a Docker network called `opentext-idol-lema_main`.  The
 `opentext-idol-lema` prefix can be changed using the `COMPOSE_PROJECT_NAME` setting.

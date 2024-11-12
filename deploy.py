@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2023 Open Text.
+# Copyright 2021-2024 Open Text.
 #
 # Licensed under the MIT License (the "License"); you may not use this file
 # except in compliance with the License.
@@ -75,8 +75,7 @@ def parse_args():
     p.add_argument('component', nargs='*', metavar='COMPONENT', help='components to deploy')
     p.add_argument('--docker-host', metavar='HOST',
                    help='Docker host to run containers on (default: use Docker running locally)')
-    p.add_argument('--init', action='store_const', const=True, default=False,
-                   help='after the system is running, perform one-time initialisation tasks')
+    p.add_argument('--init', action='store_const', const=True, default=False, help='deprecated option')
     p.add_argument('--disable-encryption', action='store_const', const=True, default=False,
                    help='configure user-facing servers to accept HTTP connections (by default, '
                         'user-facing servers accept HTTPS connections)')
@@ -164,9 +163,9 @@ def get_compose_args(components, component_paths, options,
     return compose_args
 
 
-def run_compose(components, component_paths, options, skip_pull, detach=True, remove=False, log_level='info'):
-    command = ['up', f'--pull={"never" if skip_pull else "always"}', '--build']
-    if options.skip_deploy:
+def run_compose(components, component_paths, options, skip_deploy, detach, remove, log_level='info'):
+    command = ['up', f'--pull={"never" if options.skip_pull else "always"}', '--build']
+    if skip_deploy:
         command.append('--no-start')
     run_process(get_compose_args(components, component_paths, options, command, detach, remove, log_level=log_level))
 
@@ -177,16 +176,12 @@ def deploy(components, component_paths, options):
         # should be last
         components.append('unencrypted')
 
-    run_compose(components, component_paths, options, options.skip_pull, remove=True)
-
-
-def initialise(component_paths, options):
-    components = ['auth-setup']
-    if options.disable_encryption:
-        # should be last
-        components.append('unencrypted')
-
-    run_compose(components, component_paths, options, options.skip_pull, detach=False, log_level='error')
+    # - don't remove if --skip-deploy, so that data containers persist afterwards
+    # - we want to restart if already running, to ensure that data volume changes are picked up; to avoid starting
+    #   twice, this line will only create containers
+    run_compose(components, component_paths, options, skip_deploy=True, detach=False, remove=not options.skip_deploy)
+    if not options.skip_deploy:
+        run_process(get_compose_args(components, component_paths, options, ['restart']))
 
 
 def main():
@@ -194,16 +189,16 @@ def main():
     component_paths = get_component_paths(program_args)
 
     if program_args.component:
-        validate_components(program_args.component, component_paths)
-        deploy(program_args.component + ['data-entity', 'init'], component_paths, program_args)
-        if program_args.init:
-            initialise(component_paths, program_args)
+        run_compose(['data-entity', 'data-security'], component_paths, program_args,
+                    skip_deploy=program_args.skip_deploy, detach=False, remove=False, log_level='error')
+        components = program_args.component
+        validate_components(components, component_paths)
+        deploy(components, component_paths, program_args)
 
     # If no components were listed to be started, perform docker compose down
     else:
         run_process(get_compose_args(component_paths.keys(), component_paths, program_args,
                                      ['down'], remove=True, log_level='error'))
-
 
 
 try:

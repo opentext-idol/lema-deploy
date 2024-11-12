@@ -21,13 +21,20 @@ auth:
   adminPassword: lema-auth
   # Realm in the authentication server to configure and use
   realm: lema
+  # Frontend administrator user to create as part of system initialization
+  createAdminUsername: admin
+  createAdminPassword: admin
   # Client and client credentials to configure and use for API requests
   apiClient: lema_api
   apiClientSecret: d0e76ad7-7d6b-4d86-be3a-5dfe715dbf87
   # Client to configure and use for logging into the UI
   uiClient: lema_ui
   # Expiry time in seconds for login tokens
-  tokenExpiryTimeSeconds: 600
+  tokenExpiryTimeSeconds: 300
+  # Idle timeout in seconds for login sessions
+  sessionIdleTimeSeconds: 3600
+  # Expiry time in seconds for login sessions
+  sessionExpiryTimeSeconds: 86400
   external:
     # Path on the Kubernetes server to make the Keycloak API and admin UI accessible from; must end with /
     path: /auth/
@@ -51,6 +58,8 @@ entity:
     enabled: true
     # Maximum database size
     dataVolumeSize: 5Gi
+    service:
+      protocol: https
   # Cassandra-compatible database backend
   storage:
     # Whether to deploy the component
@@ -101,7 +110,6 @@ analysis:
       vehicleAnalysis: 4
       videoClip: 4
 
-
 # PostgreSQL database server storing audit logs
 audit:
   # Whether to deploy the component
@@ -140,8 +148,14 @@ api:
     # The default number of entity IDs retrieved in a single entity traversal
     default: 500
     # The default number of entity IDs retrieved in a single suggest traversal
-    suggest: 500
-
+    suggestDefault: 500
+  watchlists:
+    enabled: true
+  logging:
+    # The log level for general api service log messages
+    apiLogLevel: INFO
+    # The log level for audit related log messages
+    auditLogLevel: WARN
 # LEMA user interface
 lemaUi:
   # Whether to deploy the component

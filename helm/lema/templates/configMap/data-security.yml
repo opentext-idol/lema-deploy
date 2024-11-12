@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.dataSecurity.config }}
+data:
+  ISOL_SECURITY_TLS: "entity-indexdb {{ .Values.entity.index.service.name }}"
+  ISOL_SECURITY_SECURITYINFO: "entity-indexdb"

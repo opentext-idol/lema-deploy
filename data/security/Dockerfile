@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2023 Open Text.
+# Copyright 2021-2024 Open Text.
 #
 # Licensed under the MIT License (the "License"); you may not use this file
 # except in compliance with the License.
@@ -12,5 +12,9 @@
 # information contained herein is subject to change without notice.
 #
 
-networks:
-  main:
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+
+COPY custom/ /source-data/
+
+ENTRYPOINT ["/startup.sh"]
