@@ -28,6 +28,6 @@ httpGet:
 {{- end }}
 {{- define "probe.nifi" -}}
 httpGet:
-  port: 8090
+  port: 8080
   path: /nifi
 {{- end }}

@@ -23,7 +23,7 @@ spec:
                     ) | indent 10 }}
           imagePullPolicy: {{ .Values.docker.pullPolicy }}
           ports:
-            - containerPort: 8090
+            - containerPort: 8080
             - containerPort: 8091
           envFrom:
             - secretRef:
@@ -69,7 +69,7 @@ spec:
   ports:
     - name: http
       port: {{ .Values.analysis.service.port }}
-      targetPort: 8090
+      targetPort: 8080
     - name: jobs
       port: {{ .Values.analysis.service.jobsPort }}
       targetPort: 8091

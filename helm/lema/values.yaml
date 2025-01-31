@@ -180,7 +180,7 @@ analysis:
       setContent: 1
   service:
     name: analysis-service
-    port: 8090
+    port: 8080
     jobsPort: 8091
     path: /
     jobsPath: /
