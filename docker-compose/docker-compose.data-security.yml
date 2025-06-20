@@ -15,18 +15,18 @@
 services:
 
   data-security:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}cybersec-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
     # create a container but don't do anything, so the container is available to list to discover all required images
     entrypoint: "true"
     networks:
       - main
 
   data-security-custom:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security-custom${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}cybersec-data-security-custom${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
     build:
       context: ../data/security
       args:
-        BASE_IMAGE: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
+        BASE_IMAGE: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}cybersec-data-security${ISOL_DOCKER_VERSION_SEP}${ISOL_API_VERSION}
     networks:
       - main
     volumes:
