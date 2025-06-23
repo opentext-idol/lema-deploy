@@ -44,6 +44,7 @@ services:
     environment:
       - MAX_HEAP_SIZE=${ISOL_ENTITY_STORAGEDB_MAX_HEAP_SIZE}
       - HEAP_NEWSIZE=${ISOL_ENTITY_STORAGEDB_HEAP_NEWSIZE}
+      - CASSANDRA_DELAY_START_TIME=0
 
 volumes:
   security-data:

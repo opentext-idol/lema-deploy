@@ -7,6 +7,8 @@ data:
 
   ISOL_ENTITY_STORAGEDB_HOST: "{{ .Values.entity.storage.service.name }}"
   ISOL_ENTITY_STORAGEDB_PORT: "{{ .Values.entity.storage.service.port }}"
+  ISOL_ENTITY_STORAGEDB_USERNAME: "{{ .Values.entity.storage.service.username }}"
+  ISOL_ENTITY_STORAGEDB_PASSWORD: "{{ .Values.entity.storage.service.password }}"
   ISOL_ENTITY_INDEXDB_PROTOCOL: "{{ .Values.entity.index.service.protocol }}"
   ISOL_ENTITY_INDEXDB_HOST: "{{ .Values.entity.index.service.name }}"
   ISOL_ENTITY_INDEXDB_ACI_PORT: "{{ .Values.entity.index.service.queryPort }}"
