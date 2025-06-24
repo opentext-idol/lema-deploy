@@ -94,6 +94,8 @@ entity:
     service:
       name: entity-storage-db-service
       port: 9042
+      username: cassandra
+      password: cassandra
   index:
     enabled: true
     name: entity-index-db
