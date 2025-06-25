@@ -31,8 +31,8 @@ docker:
 
 dataSecurity:
   name: data-security
-  container: data-security
-  image: solutions-data-security
+  container: cybersec-data-security
+  image: cybersec-data-security
   config: data-security-config
   volume: system-security-data
   volumeClaim: system-security-data
