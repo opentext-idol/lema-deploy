@@ -15,7 +15,7 @@
 services:
 
   analysis-live-mediaserver:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-analysis-live-mediaserver${ISOL_DOCKER_VERSION_SEP}${ISOL_BASE_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}cybersec-analysis-live-mediaserver${ISOL_DOCKER_VERSION_SEP}${ISOL_BASE_VERSION}
     networks:
       - main
     volumes:
@@ -31,7 +31,7 @@ services:
       - ISOL_LICENSE_SERVER_PORT=${ISOL_LICENSE_SERVER_PORT}
 
   analysis-live-processor:
-    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}solutions-analysis-live-processor${ISOL_DOCKER_VERSION_SEP}${ISOL_ANALYSIS_LIVE_VERSION}
+    image: ${ISOL_DOCKER_REGISTRY}${ISOL_DOCKER_NAME_SEP}cybersec-analysis-live-processor${ISOL_DOCKER_VERSION_SEP}${ISOL_ANALYSIS_LIVE_VERSION}
     networks:
       - main
     volumes:
@@ -57,7 +57,7 @@ services:
       - ISOL_AUDIT_USERNAME=${ISOL_AUDIT_DB_USERNAME}
       - ISOL_AUDIT_PASSWORD=${ISOL_AUDIT_DB_PASSWORD}
       - ISOL_AUDIT_DATABASE_NAME=${ISOL_AUDIT_DB_NAME}
-      - ISOL_ANALYSIS_LIVE_MEDIASERVER_HOST=analysis-live-mediaserver
+      - ISOL_ANALYSIS_LIVE_MEDIASERVER_HOST=cybersec-analysis-live-mediaserver
       - ISOL_ANALYSIS_LIVE_MEDIASERVER_ACI_PORT=14000
 
 volumes:
