@@ -31,8 +31,8 @@ docker:
 
 dataSecurity:
   name: data-security
-  container: data-security
-  image: solutions-data-security
+  container: cybersec-data-security
+  image: cybersec-data-security
   config: data-security-config
   volume: system-security-data
   volumeClaim: system-security-data
@@ -43,7 +43,7 @@ auth:
   name: auth
   replicas: 1
   container: auth-container
-  image: solutions-auth-service
+  image: cybersec-auth-service
   config: auth-config
   secret: auth-secret
   adminUser: lema-auth
@@ -84,7 +84,7 @@ entity:
     name: entity-storage-db
     replicas: 1
     container: entity-storage-db-container
-    image: solutions-entity-storagedb
+    image: cybersec-entity-storagedb
     config: entity-storage-db-config
     dataVolume: entity-storage-db-data
     dataVolumeClaim: entity-storage-db-data
@@ -101,7 +101,7 @@ entity:
     name: entity-index-db
     replicas: 1
     container: entity-index-db-container
-    image: solutions-entity-indexdb
+    image: cybersec-entity-indexdb
     config: entity-index-db-config
     dataVolume: entity-index-db-data
     dataVolumeClaim: entity-index-db-data
@@ -122,7 +122,7 @@ entity:
 filestore:
   name: filestore
   container: filestore-container
-  image: solutions-filestore-service
+  image: cybersec-filestore-service
   secret: filestore-config
   replicas: 1
   enabled: true
@@ -142,7 +142,7 @@ analysis:
   enabled: true
   name: analysis-nifi
   container: analysis-nifi-container
-  image: solutions-analysis-service
+  image: cybersec-analysis-service
   config: analysis-nifi-config
   secret: analysis-nifi-secret
   replicas: 1
@@ -195,7 +195,7 @@ audit:
   name: audit
   replicas: 1
   container: audit-db
-  image: solutions-audit-db
+  image: cybersec-audit-db
   config: audit-config
   secret: audit-secret
   dataVolume: audit-db-data
