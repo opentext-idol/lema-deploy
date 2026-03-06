@@ -49,6 +49,7 @@ auth:
   adminUser: lema-auth
   adminPassword: lema-auth
   realm: lema
+  displayName: Digital Evidence Center
   createAdminUsername: admin
   createAdminPassword: admin
   apiClient: lema_api

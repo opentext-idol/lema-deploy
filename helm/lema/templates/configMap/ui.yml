@@ -14,6 +14,7 @@ data:
   LEMA_UI_EXTERNAL_PATH: "{{ .Values.lemaUi.external.path }}"
 
   ISOL_AUTH_SERVICE_REALM: "{{ .Values.auth.realm }}"
+  ISOL_AUTH_SERVICE_REALM_DISPLAY_NAME: "{{ .Values.auth.displayName }}"
   ISOL_AUTH_SERVICE_UI_CLIENT: "{{ .Values.auth.uiClient }}"
   ISOL_AUTH_SERVICE_EXTERNAL_HOST: "{{ .Values.external.host }}"
   ISOL_AUTH_SERVICE_EXTERNAL_PORT: "{{ .Values.external.port }}"

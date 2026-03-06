@@ -26,6 +26,7 @@ data:
   ISOL_AUTH_SERVICE_EXTERNAL_PORT: "{{ .Values.external.port }}"
   ISOL_AUTH_SERVICE_EXTERNAL_PATH: "{{ .Values.auth.external.path }}"
   ISOL_AUTH_SERVICE_REALM: "{{ .Values.auth.realm }}"
+  ISOL_AUTH_SERVICE_REALM_DISPLAY_NAME: "{{ .Values.auth.displayName }}"
   ISOL_AUTH_SERVICE_API_CLIENT: "{{ .Values.auth.apiClient }}"
   ISOL_AUTH_SERVICE_API_URL: "{{ .Values.external.protocol }}://{{ .Values.external.host }}:{{ .Values.external.port }}{{ .Values.auth.external.path }}"
   ISOL_AUTH_SERVICE_UI_CLIENT: "{{ .Values.auth.uiClient }}"
