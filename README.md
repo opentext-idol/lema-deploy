@@ -1,10 +1,10 @@
-# Law Enforcement Media Application (LEMA)
+# Digital Evidence Center (DEC)
 
-The following installation steps complement the full LEMA Administration Guide, available from the [IDOL documentation site](https://www.microfocus.com/documentation/idol/), under "IDOL Government Solutions".
+The following installation steps complement the full DEC Administration Guide, available from the [IDOL documentation site](https://www.microfocus.com/documentation/idol/), under "IDOL Government Solutions".
 
 ## Basic deployment
 
-To deploy LEMA to a Docker system, use the `deploy.py` tool, which requires Docker Compose.
+To deploy DEC to a Docker system, use the `deploy.py` tool, which requires Docker Compose.
 Required software versions:
 - Python 3, version 3.6 or later
 - Docker, version 20.10.22 or later
@@ -13,7 +13,7 @@ Required software versions:
 Log in with your own password to gain access to the OpenText IDOL containers on Docker Hub:
 
 ```
-docker login -u microfocusidolreadonly
+docker login registry.opentext.com
 ```
 
 > To obtain your password (API key) contact OpenText support.
@@ -30,11 +30,11 @@ may have to run it as a different user with sufficient permissions to manage Doc
 python3 deploy.py auth entity filestore analysis audit api ui
 ```
 
-With the default configuration, the LEMA UI will be available at `https://localhost:8070` once the
+With the default configuration, the DEC UI will be available at `https://localhost:8070` once the
 system has started.
 
 After the system has started, log in with the admin user (see `ISOL_INIT_AUTH_ADMIN_USERNAME` in `config/base.env`). The
-LEMA UI will then perform a one off initialization. 
+DEC UI will then perform a one off initialization. 
 
 To show options and other usage information, run:
 
@@ -77,10 +77,10 @@ python3 deploy.py --disable-encryption auth entity filestore analysis audit api 
 
 > note: changes to the encryption state of a deployed system require manual deletion of the realm in Keycloak before running `deploy.py` with the new state.
 
-To resume a stopped LEMA system, or to apply changes made to configuration files, or to change which
+To resume a stopped DEC system, or to apply changes made to configuration files, or to change which
 components are deployed: run the normal command to deploy.
 
-To stop and remove deployed LEMA services, run the Python `deploy.py` tool with no arguments:
+To stop and remove deployed DEC services, run the Python `deploy.py` tool with no arguments:
 
 ```
 python3 deploy.py
@@ -113,9 +113,9 @@ while others listen on 127.0.0.1 only):
 | audit             | 8050     | no         | PostgreSQL database storing audit logs                                     |
 | dataset-locations | 8100     | no         | ACI port of IDOL Content database backend for the locations database       |
 | api               | 8060     | yes        | System HTTP API                                                            |
-| ui                | 8070     | yes        | LEMA UI                                                                    |
+| ui                | 8070     | yes        | DEC UI                                                                     |
 
-Docker volumes are created with the prefix `opentext-idol-lema_`, which can be changed using the
+Docker volumes are created with the prefix `opentext-idol-dec_`, which can be changed using the
 `COMPOSE_PROJECT_NAME` setting.  The following volumes are created:
 
 | **Component**     | **Volume name**                | **Purpose**                         |
@@ -130,5 +130,5 @@ Docker volumes are created with the prefix `opentext-idol-lema_`, which can be c
 | -                 | entity-data                    | Schema for application data         |
 | -                 | security-data                  | Security-related data               |
 
-All containers connect to a Docker network called `opentext-idol-lema_main`.  The
-`opentext-idol-lema` prefix can be changed using the `COMPOSE_PROJECT_NAME` setting.
+All containers connect to a Docker network called `opentext-idol-dec_main`.  The
+`opentext-idol-dec` prefix can be changed using the `COMPOSE_PROJECT_NAME` setting.
