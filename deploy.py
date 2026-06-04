@@ -88,6 +88,8 @@ def parse_args():
                    help='skip pulling Docker images; allows running against a custom set of images')
     p.add_argument('--skip-deploy', action='store_const', const=True, default=False,
                    help='don\'t start Docker containers')
+    p.add_argument('--compose-parallel-limit', metavar='NUM', type=int, default=9,
+                   help='limit docker compose parallel operations (default: 9)')
     return p.parse_args()
 
 
@@ -150,6 +152,8 @@ def get_compose_args(components, component_paths, options,
     if options.docker_host is not None:
         compose_args.extend(['--host', options.docker_host])
     compose_args.append('compose')
+    if options.compose_parallel_limit is not None:
+        compose_args.extend(['--parallel', str(options.compose_parallel_limit)])
     env_paths = (list(get_env_paths(compose_components)) +
                  ([] if options.config_file is None else [options.config_file]))
     compose_args.extend(['--env-file', build_env_file(env_paths)])
