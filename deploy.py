@@ -88,8 +88,8 @@ def parse_args():
                    help='skip pulling Docker images; allows running against a custom set of images')
     p.add_argument('--skip-deploy', action='store_const', const=True, default=False,
                    help='don\'t start Docker containers')
-    p.add_argument('--compose-parallel-limit', metavar='NUM', type=int, default=9,
-                   help='limit docker compose parallel operations (default: 9)')
+    p.add_argument('--compose-parallel-limit', metavar='NUM', type=int, default=2,
+                   help='limit docker compose parallel operations (default: 2)')
     return p.parse_args()
 
 
